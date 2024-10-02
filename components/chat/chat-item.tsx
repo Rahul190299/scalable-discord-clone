@@ -16,6 +16,9 @@ import qs from 'query-string';
 import axios from 'axios';
 import { useModal } from '@/hooks/user-modal-store';
 import { useRouter, useParams } from 'next/navigation';
+import { auth } from '@clerk/nextjs';
+
+
 
 interface ChatItemProps {
   id: string;
@@ -53,7 +56,7 @@ const ChatItem: FC<ChatItemProps> = ({
   const { onOpen } = useModal();
   const params = useParams();
   const router = useRouter();
-
+  const { userId,email } = auth();
   const onMemberClick = () => {
     if (member.id === currentMember.id) return;
     router.push(`/servers/${params?.serverId}/conversation/${member.id}`);
@@ -124,7 +127,7 @@ const ChatItem: FC<ChatItemProps> = ({
           <div className="flex items-center gap-x-2">
             <div className="flex items-center">
               <p className="font-semibold text-sm hover:underline cursor-poiter">
-                {member.profile.name}
+                {member.profile.name? member.profile.name : email}
               </p>
               <ActionTooltip label={member.role}>
                 {roleIconMap[member.role]}

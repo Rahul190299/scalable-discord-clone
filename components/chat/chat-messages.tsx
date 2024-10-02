@@ -44,7 +44,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
 
   const chatRef = useRef<ElementRef<'div'>>(null);
   const bottomRef = useRef<ElementRef<'div'>>(null);
-
+  console.log(apiUrl);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
       queryKey,
@@ -52,7 +52,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
       paramKey,
       paramValue,
     });
-
+    console.log(data);
   useChatSocket({ queryKey, addKey, updateKey });
   useChatScroll({
     chatRef,

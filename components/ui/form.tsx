@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
@@ -90,8 +92,8 @@ const FormLabel = React.forwardRef<
 >(({ className, ...props }, ref) => {
   const { error, formItemId } = useFormField()
 
-  return (
-    <Label
+  return ( 
+    <Label 
       ref={ref}
       className={cn(error && "text-destructive", className)}
       htmlFor={formItemId}
