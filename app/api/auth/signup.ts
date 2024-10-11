@@ -1,10 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import { z } from 'zod';
 import { db } from '@/lib/db';
+import Auth from '@/lib/auth';
+import { time } from 'console';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
+import { Nodemailer } from '@/lib/nodemailer';
 // Initialize Prisma Client
 //const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -37,37 +41,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const promise = Auth.signWithJWT(password);
+    promise
+    .then( async (hashedPassword) => {
+      // Save the new user in the database
+      if(hashedPassword){
+        const newUser = await db.profile.create({
+          data: {
+            email,
+            password: hashedPassword,
+            userId : email,
+            name : username,
+            imageUrl : "",
+            isVerified : false,
+            otp: "",
+            otpExpiresAt: new Date(Date.now() + 10 * 60 * 1000),  
 
-    // Save the new user in the database
-    const newUser = await db.profile.create({
-      data: {
-        email,
-        password: hashedPassword,
-        userId : email,
-        name : username,
-        imageUrl : "",
-      },
-    });
+          },
+        });
+        if(newUser){
+          //lets send otp to verify mail
+          Nodemailer.SendMail()
 
-    // Create a JWT
-    const token = jwt.sign(
-      { id: newUser.id, email: newUser.email }, // Payload
-      JWT_SECRET,
-      { expiresIn: '1d' } // Token expiration time
-    );
+        }else{
+          res.status(500).json({message : 'failed to create user'});
+        }
 
-    // Set the token in a cookie
-    res.setHeader('Set-Cookie', cookie.serialize('token', token, {
-      httpOnly: true, // Prevents access from JavaScript
-      secure: process.env.NODE_ENV !== 'development', // Use HTTPS in production
-      maxAge: 60 * 60 * 24, // 1 day
-      sameSite: 'strict',
-      path: '/',
-    }));
+        // Return success response with redirect URL
+        res.status(201).json({ message: 'User created successfully', redirect: '/profile' });
+      }
+    
+    })
+    .catch((error) => {
+      return res.status(400).json({ message: error }); 
+    }) 
 
-    // Return success response with redirect URL
-    res.status(201).json({ message: 'User created successfully', redirect: '/profile' });
+    
   } catch (error) {
     // Handle Zod validation errors
     if (error instanceof z.ZodError) {

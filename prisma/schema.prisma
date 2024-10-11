@@ -12,9 +12,12 @@ model Profile {
   id String @id @default(uuid())
   userId String @unique
   name String
+  password String
   imageUrl String @db.Text
   email String @db.Text
-
+  otp String @db.Text
+  isVerified Boolean 
+  otpExpiresAt DateTime @default(now())
   servers Server[]
   members Member[]
   channels Channel[]
