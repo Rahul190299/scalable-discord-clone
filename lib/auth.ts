@@ -1,8 +1,9 @@
+//@ts-ignore
 import bcrypt from 'bcryptjs';
+//@ts-ignore
 import jwt from 'jsonwebtoken';
 import cookie  from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { StringValidation } from 'zod';
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Store this in .env
 
 export default class Auth {
@@ -75,4 +76,7 @@ export default class Auth {
             
         }
     }
+
+    
+    
 }

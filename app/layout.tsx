@@ -8,6 +8,7 @@ import { ModalProvider } from '@/components/providers/modal-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { SocketProvider } from '@/components/providers/socket-provider';
 import QueryProvider from '@/components/providers/query-provider';
+import { Navbar } from '@/components/navbar';
 
 const font = Open_Sans({ subsets: ['latin'] });
 
@@ -24,16 +25,22 @@ export default function RootLayout({
   return (
     
       <html lang="en" suppressHydrationWarning>
-        <body className={cn(font.className, 'bg-white dark:bg-[#313338]')}>
+        <body className={cn(
+          'min-h-screen bg-background font-satoshi antialiased',
+          
+         )}>
+          
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem={false}
             storageKey="discord-theme"
           >
+            
             <SocketProvider>
               <QueryProvider>
                 <ModalProvider />
+                <Navbar/>
                 {children}
               </QueryProvider>
             </SocketProvider>

@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-
+//@ts-ignore
 import jwt from 'jsonwebtoken';
 
 interface layoutProps {

@@ -1,18 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+//@ts-ignore
 import bcrypt from 'bcryptjs';
+//@ts-ignore
 import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 import Auth from '@/lib/auth';
-import { time } from 'console';
-import nodemailer from 'nodemailer';
-import crypto from 'crypto';
-import { Nodemailer } from '@/lib/nodemailer';
-// Initialize Prisma Client
-//const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
-
 // Define the input schema using Zod
 const SignupSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -29,6 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // Validate input using Zod
+    let strError : string = "";
+    let bGoAhead : boolean = true;
     const { email, password ,username} = SignupSchema.parse(req.body);
 
     // Check if user already exists
@@ -54,21 +50,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             name : username,
             imageUrl : "",
             isVerified : false,
-            otp: "",
+            otp : "",
             otpExpiresAt: new Date(Date.now() + 10 * 60 * 1000),  
 
           },
         });
         if(newUser){
           //lets send otp to verify mail
-          Nodemailer.SendMail()
-
+          
         }else{
           res.status(500).json({message : 'failed to create user'});
         }
 
         // Return success response with redirect URL
-        res.status(201).json({ message: 'User created successfully', redirect: '/profile' });
+        res.status(200).json({ message: 'User created successfully', redirect: '/profile' });
       }
     
     })
