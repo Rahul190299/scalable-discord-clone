@@ -1,9 +1,10 @@
+//@ts-ignore
 import nodemailer from "nodemailer";
 
 
 const transporter = nodemailer.createTransport({
-    host: "gmail",
-    port: 587,
+    service : "gmail",
+    port: 8000,
     secure: false, // true for port 465, false for other ports
     auth: {
       user: process.env.NODE_MAILER_FROM_EMAIL,
@@ -13,9 +14,11 @@ const transporter = nodemailer.createTransport({
 
 export class Nodemailer {
 
+      
       // async..await is not allowed in global scope, must use a wrapper
-      public static async SendMail(from : string | undefined ,to:string,otp:string) :Promise<boolean> {
+      public static async SendMail(to:string,otp:number) :Promise<boolean> {
         // send mail with defined transport object
+        const from :string | undefined= process.env.NODE_MAILER_FROM_EMAIL;
         try{
           const info = await transporter.sendMail({
             from: from, // sender address

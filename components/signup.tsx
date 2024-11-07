@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -36,6 +36,8 @@ const formSchema = z.object({
 });
 
 export function ProfileForm() {
+
+  const router = useRouter();
   // ...
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -46,15 +48,34 @@ export function ProfileForm() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    const result = await fetch('/api/auth/signup',{
+      method : "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    }); 
+    switch(result.status){
+      case 200:
+        const res = result.json();
+        router.push('/verifyotp')
+        break;
+      case 400:
+         alert('user alredy exist login to proceed')
+        break;
+      default:
+        break;
+    }
+    
     //call api to store values in db
   }
 
   return (
-    <section className="wrapper relative flex min-h-screen items-center justify-center overflow-hidden antialiased">
+    <section className="wrapper relative flex min-h-screen items-center justify-center overflow-hidden antialiased w-3/4">
       <motion.div
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -64,9 +85,9 @@ export function ProfileForm() {
           type: "spring",
           damping: 10,
         }}
-        className="flex w-full flex-col justify-between gap-12 rounded-2xl bg-primary/5 p-8 md:max-w-[30vw]"
+        className="flex w-full flex-col justify-between gap-6 rounded-2xl bg-primary/5 px-16 py-8 md:max-w-[30vw]"
       >
-        <div className="flex flex-col text-center">
+        <div className="flex flex-col text-center w-full">
           <h2 className="text-3xl font-semibold tracking-tighter md:text-4xl">
             Welcome to{" "}
             <span className="bg-gradient-to-b from-blue-400 to-blue-700 bg-clip-text pr-1 font-black tracking-tighter text-transparent">
@@ -77,13 +98,13 @@ export function ProfileForm() {
             Log in to create servers!
           </p>
         </div>
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 w-full">
           <div className="grid w-full items-center gap-4">
             <div className="relative flex flex-col gap-2">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-8"
+                  className="space-y-4"
                 >
                   <FormField
                     control={form.control}
@@ -92,7 +113,7 @@ export function ProfileForm() {
                       <FormItem>
                         <FormLabel>Username</FormLabel>
                         <FormControl>
-                          <Input placeholder="username" {...field} />
+                          <Input className="focus:ring-none border-none bg-primary/5 focus:outline-none w-full" placeholder="username" {...field} />
                         </FormControl>
 
                         <FormMessage className="text-red-500" />
@@ -106,7 +127,7 @@ export function ProfileForm() {
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input placeholder="email" {...field} />
+                          <Input className="focus:ring-none border-none bg-primary/5 focus:outline-none"  placeholder="email" {...field} />
                         </FormControl>
 
                         <FormMessage className="text-red-500" />
@@ -120,20 +141,22 @@ export function ProfileForm() {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input placeholder="password" {...field} />
+                          <Input className="focus:ring-none border-none bg-primary/5 focus:outline-none" placeholder="password" {...field} />
                         </FormControl>
 
                         <FormMessage className="text-red-500" />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit">Signup</Button>
+                  <Button className="w-full bg-blue-700		text-white hover:bg-sky-700" type="submit">Signup</Button>
                 </form>
               </Form>
             </div>
           </div>
         </div>
       </motion.div>
+      <div className="absolute -bottom-[16rem] -z-[20] size-[48rem] h-1/2 overflow-hidden rounded-full bg-gradient-to-t from-blue-400 to-blue-700 blur-[16em]" >
+      </div>
     </section>
   );
 }

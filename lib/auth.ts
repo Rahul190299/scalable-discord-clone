@@ -10,7 +10,7 @@ export default class Auth {
   
     public static async signWithJWT(password:string) :Promise<string | null>{
         try{
-           const salt = bcrypt.getSalt(10);
+           const salt = await bcrypt.genSalt(10);
            return  await bcrypt.hash(password,salt); 
 
         }catch(error){

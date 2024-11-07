@@ -34,9 +34,8 @@ export default async function handler(
       } else {
         const otp = crypto.randomInt(100000, 999999);
         const bResult: boolean = await Nodemailer.SendMail(
-          process.env.NODE_MAILER_FROM_EMAIL,
           email,
-          otp.toString()
+          otp
         );
         if (bResult) {
           await db.profile.update({

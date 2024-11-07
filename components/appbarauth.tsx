@@ -3,10 +3,13 @@ import { Button } from './ui/button';
 //@ts-ignore
 import Cookies from "js-cookie";
 import Auth from '@/lib/auth';
-import { redirect } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 export const AppbarAuth = () => {
   
   //const cookieStore = cookies();
+  const pathName = usePathname();
+  const router = useRouter();
+  console.log(pathName);
   const token = Cookies.get('token')?.value;
     let user = null;
     if(token){
@@ -15,7 +18,13 @@ export const AppbarAuth = () => {
     
 
     const signIn = () => {
-      redirect('/sign-in');
+      if(pathName === "/sign-up"){
+        router.push('/sign-in');
+      }
+      else{
+        router.push('/sign-up');
+      }
+      
     }
 
   return (
@@ -25,7 +34,8 @@ export const AppbarAuth = () => {
           signIn();
         }}
       >
-        Login
+        {pathName === "/sign-up" ? "Login" : "Signup"}
+        
       </Button>
     )
   );

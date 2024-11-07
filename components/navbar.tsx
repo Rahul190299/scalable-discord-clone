@@ -92,7 +92,7 @@ export const Navbar = () => {
               <p
                 className={`hidden bg-gradient-to-b from-blue-400 to-blue-700 bg-clip-text text-2xl font-black tracking-tighter text-transparent min-[375px]:block`}
               >
-                100xDevs
+                Discord
               </p>
             </Link>
           </motion.div>
