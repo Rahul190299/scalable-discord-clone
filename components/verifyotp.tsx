@@ -14,19 +14,45 @@ import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useSessionStore } from "@/store/sessionstore";
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
     otp: z.string(),
   });
   
   export function VerifyOtp() {
+    const email = useSessionStore((state) => state.email);
+    const router = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {},
     });
   
-    function onSubmit(values: z.infer<typeof formSchema>) {
-      console.log(values);
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+      try{
+        console.log(values);
+        const inputObj = {...values,email};
+        console.log(inputObj);
+        const result = await fetch('/api/auth/verifyotp',{
+          method : "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(inputObj),
+        }); 
+        switch(result.status){
+          case 200:
+            const res = await result.json();
+            if(res.bSuccess){
+              router.push("/");
+            }
+            break;
+          default: 
+            break;
+        }
+      }catch(error){
+        console.log(error);
+      }
     }
   
     return (

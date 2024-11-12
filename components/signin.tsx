@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useToast } from "@/hooks/use-toast"
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,8 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { redirect } from "next/navigation";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -28,8 +29,47 @@ export function SignInForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
+  const {toast} = useToast();
+  const router = useRouter();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try{
+      const result = await fetch('/api/auth/signin',{
+        method : "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      }); 
+      const res = await result.json();
+      const redirectUrl = res.redirect?.toString();
+      const strMessage = res.message?.toString();
+      switch(result.status){
+        case 200:
+          if(redirectUrl === '/'){
+            router.push(redirectUrl);
+          }
+          else{
+            toast({
+              description: strMessage,
+            })
+          }
+          break;
+        case 400:
+          toast({
+            description: strMessage,
+            
+          })
+          break;
+        case 500:
+          toast({
+            description: "Internal server error please try again",
+            variant : "destructive"
+          })
+          break;
+      }
+    }catch(error){
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+    }
     console.log(values);
   }
 
@@ -80,7 +120,7 @@ export function SignInForm() {
             
           </form>
         </Form>
-        <Button onClick={() => redirect("/sign-up")}>Signup</Button>
+        
       </motion.div>
     </section>
   );

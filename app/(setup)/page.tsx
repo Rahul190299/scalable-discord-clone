@@ -4,16 +4,18 @@ import { db } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import InitialModal from '@/components/modals/initial-modal';
 import { cookies } from 'next/headers'; // To access cookies in server-side component
+import cookie from 'cookie';
 import Auth from '@/lib/auth';
 interface setupPageProps {}
 
 const SetupPage: FC<setupPageProps> = async ({}) => {
-    const JWT_SECRET = process.env.JWT_SECRET
+    
     const cookieStore = cookies();
-    const token = cookieStore.get('token')?.value;
+    const cookieString = cookieStore.get('Set-Cookie')?.value;
     let user = null;
-    if(token){
-        user = Auth.verifySessionToken(token);
+    if(cookieString){
+        const parsedCookies = cookie.parse(cookieString || '');
+        user = Auth.verifySessionToken(parsedCookies.token);
     }
     if(!user){
         redirect('/sign-in');

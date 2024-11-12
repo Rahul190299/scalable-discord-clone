@@ -36,11 +36,13 @@ export  async function POST(req: NextRequest) {
     });
 
     if (existingUser) {
-      return NextResponse.json({ message: 'User already exists' });
+      return NextResponse.json({ message: 'User already exists' },{status : 200});
     }
+    //generate salt 
+    const salt = await Auth.getSalt();
 
     // Hash the password
-    const hashedPassword = await  Auth.signWithJWT(password);
+    const hashedPassword = await  Auth.signWithJWT(password,salt);
     if(hashedPassword){
       const newUser = await db.profile.create({
         data: {
@@ -52,7 +54,7 @@ export  async function POST(req: NextRequest) {
           isVerified : false,
           otp : "",
           otpExpiresAt: new Date(Date.now() + 10 * 60 * 1000),  
-
+          salt : salt,
         },
       });
       if(newUser){
@@ -71,16 +73,11 @@ export  async function POST(req: NextRequest) {
         }
         
       }else{
-        NextResponse.json({message : 'failed to sign up user'},{status : 500});
+        return NextResponse.json({message : 'failed to sign up user'},{status : 500});
       }
 
-      if(bGoAhead){
-        // Return success response with redirect URL
-         return NextResponse.json({ message: 'User created successfully', redirect: '/verifyotp' },{status : 200});
-      }
-      else{
-        return NextResponse.json({ message: 'User created successfully', redirect: '/verifyotp' },{status : 200});
-      }
+      return NextResponse.json({ message: 'User created successfully', redirect: '/verifyotp' },{status : 200});
+      
       
     }
     else{

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { useSessionStore } from "@/store/sessionstore";
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -38,6 +39,7 @@ const formSchema = z.object({
 export function ProfileForm() {
 
   const router = useRouter();
+  const setEmail = useSessionStore((state) => state.setEmail);
   // ...
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,6 +54,7 @@ export function ProfileForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    setEmail(values.email);
     const result = await fetch('/api/auth/signup',{
       method : "POST",
       headers: {
@@ -62,7 +65,7 @@ export function ProfileForm() {
     switch(result.status){
       case 200:
         const res = result.json();
-        router.push('/verifyotp')
+        router.push('/verifyotp');
         break;
       case 400:
          alert('user alredy exist login to proceed')

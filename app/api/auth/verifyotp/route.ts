@@ -1,63 +1,93 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from '@/lib/db';
+import { db } from "@/lib/db";
+import { NextRequest, NextResponse } from "next/server";
+import Auth from "@/lib/auth";
 
+export  async function POST(req: NextRequest) {
+  try {
+    let bSuccess: boolean = false;
+    let strMessage: string = "";
+    let strRedirect: string = "";
+    if (req.method != "POST") {
+      return NextResponse.json(
+        { message: "only post request allowed" },
+        { status: 405 }
+      );
+    }
 
-
-export default async function handler(req : NextApiRequest,res:NextApiResponse){
-    try{
-        let bSuccess : boolean = false;
-        let strMessage : string = "";
-        let strRedirect : string = "";
-        if(req.method != 'POST'){
-            return res.status(405).json({message : "only post request allowed"});
-        }
-
-        const {email,otp} = req.body();
-        if(!email || ! otp){
-            return res.status(400).json({message : "missing parameters"});
-            
-        }
-        const user = await db.profile.findUnique({
-            where : {userId : email}
-        });
-        if(!user){
-            return res.status(404).json({message : "user does not exits"});
-        }
-        if(user.isVerified){
-            bSuccess = true;
-            strMessage = "user already verified";
+    const { email, otp } = await req.json();
+    if (!email || !otp) {
+      return NextResponse.json(
+        { message: "missing parameters" },
+        { status: 400 }
+      );
+    }
+    const user = await db.profile.findUnique({
+      where: { userId: email },
+    });
+    if (!user) {
+      return NextResponse.json({ message: "user does not exits" });
+    }
+    if (user.isVerified) {
+      bSuccess = true;
+      strMessage = "user already verified";
+    } else {
+      const userOtp = user.otp;
+      if (otp === userOtp) {
+        if(new Date(Date.now()) < user.otpExpiresAt){
+          //lets update user status in db
+          await db.profile.update({
+            where : {userId : email},
+            data : { isVerified : true}
+          });
+          bSuccess = true;
+          strMessage = "otp verified successfully";
         }
         else{
-            const userOtp = user.otp;
-            if(otp === userOtp){
-                bSuccess = true;
-                strMessage = "otp verified successfully";
-            }
-            else{
-                strMessage = "otp verification failed";
-            }
-            
+          strMessage = "otp expired";
         }
-        if(bSuccess == true){
-            const server = await db.server.findFirst({
-                where: {
-                    members: {
-                        some: {
-                            profileId: user.id,
-                        },
-                    },
-                },
-            });
-            if(server){
-                strRedirect = `/servers/${server.id}`;
-            }
-            else{
-                strRedirect = "/";
-            }
-            
-        }
-        return res.status(200).json({ result : bSuccess,message : strMessage,redirect : strRedirect});
-    }catch(error){
-        res.status(500).json({message : "Internal server error"})
+        
+      } else {
+        strMessage = "otp verification failed";
+      }
     }
+    if (bSuccess == true) {
+      
+      const server = await db.server.findFirst({
+        where: {
+          members: {
+            some: {
+              profileId: user.id,
+            },
+          },
+        },
+      });
+      if (server) {
+        strRedirect = `/servers/${server.id}`;
+      } else {
+        strRedirect = "/";
+      }
+      const res = {
+        result: bSuccess,
+        message: strMessage,
+        redirect: strRedirect,
+      };
+      const response = NextResponse.json(res,{status : 200});
+      const token = Auth.generateToken(user.userId, user.email);
+      Auth.setTokenCookie(response, token);
+      return response;
+    } else {
+      const res = {
+        result: bSuccess,
+        message: strMessage,
+        redirect: strRedirect,
+      };
+      return NextResponse.json(res,{status : 200});
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { result: false, message: "Internal server error", redirect: "/sign-in" },
+      { status: 500 }
+    );
+  }
 }

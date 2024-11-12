@@ -15,6 +15,7 @@ model Profile {
   password String
   imageUrl String @db.Text
   email String @db.Text
+  salt String? @db.Text
   otp String @db.Text
   isVerified Boolean 
   otpExpiresAt DateTime @default(now())
