@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast"
+import { toast } from 'sonner';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useSessionStore } from "@/store/sessionstore";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -25,14 +27,17 @@ const formSchema = z.object({
 });
 
 export function SignInForm() {
+  const setEmail = useSessionStore((state) => state.setEmail);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
-  const {toast} = useToast();
+  
   const router = useRouter();
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try{
+      console.log('in signin');
+      const loadId = toast.loading('Signing in...');
       const result = await fetch('/api/auth/signin',{
         method : "POST",
         headers: {
@@ -40,31 +45,28 @@ export function SignInForm() {
         },
         body: JSON.stringify(values),
       }); 
+      toast.dismiss(loadId);
       const res = await result.json();
-      const redirectUrl = res.redirect?.toString();
+      console.log(res);
+      const redirectUrl = res.redirectUrl?.toString();
       const strMessage = res.message?.toString();
+      
       switch(result.status){
         case 200:
           if(redirectUrl === '/'){
             router.push(redirectUrl);
+            toast.success('Signed in');
           }
           else{
-            toast({
-              description: strMessage,
-            })
+            router.push(redirectUrl);
+            toast.message(strMessage);
           }
           break;
         case 400:
-          toast({
-            description: strMessage,
-            
-          })
+          toast.error(strMessage);
           break;
         case 500:
-          toast({
-            description: "Internal server error please try again",
-            variant : "destructive"
-          })
+          toast.error("Internal server error please try again");
           break;
       }
     }catch(error){
@@ -95,7 +97,10 @@ export function SignInForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="email" {...field} />
+                    <Input placeholder="email" {...field}  onChange={(e) =>{
+                      field.onChange(e);
+                      setEmail(e.target.value)
+                    } }/>
                   </FormControl>
 
                   <FormMessage className="text-red-500" />

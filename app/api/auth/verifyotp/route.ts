@@ -73,7 +73,7 @@ export  async function POST(req: NextRequest) {
         redirect: strRedirect,
       };
       const response = NextResponse.json(res,{status : 200});
-      const token = Auth.generateToken(user.userId, user.email);
+      const token = Auth.generateToken(user.id, user.email);
       Auth.setTokenCookie(response, token);
       return response;
     } else {

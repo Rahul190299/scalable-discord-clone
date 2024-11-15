@@ -2,7 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import { cn } from '@/lib/utils';
-
+import { Toaster } from 'sonner';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ModalProvider } from '@/components/providers/modal-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
@@ -40,6 +40,7 @@ export default function RootLayout({
             <SocketProvider>
               <QueryProvider>
                 <ModalProvider />
+                <Toaster/>
                 <Navbar/>
                 {children}
               </QueryProvider>

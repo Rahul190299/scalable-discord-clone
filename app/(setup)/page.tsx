@@ -10,19 +10,24 @@ interface setupPageProps {}
 
 const SetupPage: FC<setupPageProps> = async ({}) => {
     
+   
     const cookieStore = cookies();
     const cookieString = cookieStore.get('Set-Cookie')?.value;
     let user = null;
     if(cookieString){
         const parsedCookies = cookie.parse(cookieString || '');
         user = Auth.verifySessionToken(parsedCookies.token);
+        
     }
     if(!user){
         redirect('/sign-in');
     }
 
     console.log("in setup");
-    const profile = await initialProfile();
+    const profile = await initialProfile(user.id);
+    if(!profile){
+        redirect('/sign-in');
+    }
     const server = await db.server.findFirst({
         where: {
             members: {

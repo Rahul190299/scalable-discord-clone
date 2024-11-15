@@ -5,23 +5,23 @@ import { db } from "@/lib/db";
 import crypto from "crypto";
 
 import { Nodemailer } from "@/lib/nodemailer";
+import { NextRequest, NextResponse } from "next/server";
 // Define the input schema using Zod
 const SignupSchema = z.object({
   email: z.string().email("Invalid email address"),
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
+export  async function POST(
+  req: NextRequest
 ) {
   try {
     let strError: string = "";
     let bRes: boolean = false;
     if (req.method != "POST") {
-      res.status(405).json({ message: "only POST request allowed" });
+      return NextResponse.json({ message: "only POST request allowed" },{status : 405});
     }
 
-    const { email } = SignupSchema.parse(req.body);
+    const { email } = SignupSchema.parse(await req.json());
 
     // Check if user already exists
     const existingUser = await db.profile.findUnique({
@@ -40,20 +40,21 @@ export default async function handler(
         if (bResult) {
           await db.profile.update({
             where: {userId: email },
-            data: { otp: otp.toString() },
+            data: { otp: otp.toString() , updatedAt : new Date(Date.now()) },
+            
           });
           strError = "otp sent successfully";
           bRes = true;
         } else {
-          strError = "Failed to send email";
+          strError = "Failed to send otp";
         }
       }
     } else {
-      strError = "user does not exits with this email";
+      strError = "User does not exits with this email";
     }
 
-    res.status(200).json({ message: strError, res: bRes });
+    return NextResponse.json({ message: strError, res: bRes },{status : 200});
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    return NextResponse.json({ message: "Internal Server Error" },{status : 500});
   }
 }

@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         return response;
       }
     } else {
-        return NextResponse.json({message : "user not verified",redirectUrl : "/verify-otp"},{status : 200})
+        return NextResponse.json({message : "user not verified",redirectUrl : "/verifyotp"},{status : 200})
     }
   } catch (error) {
     if (error instanceof ZodError) {

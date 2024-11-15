@@ -16,6 +16,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSessionStore } from "@/store/sessionstore";
 import { useRouter } from "next/navigation";
+import {toast} from 'sonner';
+import { EmailAddress } from "@clerk/nextjs/server";
 const formSchema = z.object({
     otp: z.string(),
   });
@@ -27,13 +29,14 @@ const formSchema = z.object({
       resolver: zodResolver(formSchema),
       defaultValues: {},
     });
-  
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+
+    async function fnSendOtp(){
       try{
-        console.log(values);
-        const inputObj = {...values,email};
+        console.log("in fnsendotp" + email);
+        const inputObj = {email};
         console.log(inputObj);
-        const result = await fetch('/api/auth/verifyotp',{
+        
+        const result = await fetch('/api/auth/sendotp',{
           method : "POST",
           headers: {
             'Content-Type': 'application/json',
@@ -43,8 +46,44 @@ const formSchema = z.object({
         switch(result.status){
           case 200:
             const res = await result.json();
+            if(res.bResult){
+              toast.success("otp send successfully at "+email);
+            }
+            else{
+              toast.error(res.strError);
+            }
+            break;
+          default:
+            toast.message("Failed to send otp please try again");
+            break;
+
+        }
+        
+      }catch(error){
+
+      }
+    }
+  
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+      try{
+        console.log(values);
+        const inputObj = {...values,email};
+        console.log(inputObj);
+        const loadId = toast.loading('Verifying otp, please wait...');
+        const result = await fetch('/api/auth/verifyotp',{
+          method : "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(inputObj),
+        }); 
+        toast.dismiss(loadId);
+        switch(result.status){
+          case 200:
+            const res = await result.json();
             if(res.bSuccess){
               router.push("/");
+              toast.success('Verified otp successfully');
             }
             break;
           default: 
@@ -84,6 +123,7 @@ const formSchema = z.object({
               )}
             />
             <Button type="submit">Verify</Button>
+            <Button onClick={fnSendOtp}></Button>
           </form>
         </Form>
       </motion.div>

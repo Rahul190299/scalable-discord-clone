@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { motion } from "framer-motion";
+import { toast } from 'sonner';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -55,6 +56,7 @@ export function ProfileForm() {
     // ✅ This will be type-safe and validated.
     console.log(values);
     setEmail(values.email);
+    const loadId = toast.loading('Signing up, please wait...');
     const result = await fetch('/api/auth/signup',{
       method : "POST",
       headers: {
@@ -62,15 +64,28 @@ export function ProfileForm() {
       },
       body: JSON.stringify(values),
     }); 
+    toast.dismiss(loadId);
     switch(result.status){
       case 200:
         const res = result.json();
         router.push('/verifyotp');
+        toast.success('Account successfully created,please verify otp');
         break;
       case 400:
          alert('user alredy exist login to proceed')
         break;
       default:
+        if (result.status === 401) {
+          toast.error('Invalid Credentials, try again!');
+        } else if (result.status === 400) {
+          toast.error('Missing Credentials!');
+        } else if (result.status === 404) {
+          toast.error('Account not found!');
+        } else if (result.status === 403) {
+          toast.error('Forbidden!');
+        } else {
+          toast.error('oops something went wrong..!');
+        }
         break;
     }
     
