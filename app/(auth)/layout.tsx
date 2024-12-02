@@ -1,7 +1,8 @@
 import { FC, ReactNode } from 'react';
 //@ts-ignore
 import jwt from 'jsonwebtoken';
-
+import { Navbar } from '@/components/navbar';
+import { cn } from '@/lib/utils';
 interface layoutProps {
     children: ReactNode;
     user :string
@@ -10,8 +11,9 @@ interface layoutProps {
 const layout: FC<layoutProps> = ({ children }) => {
     
     return (
-        <div className="h-full flex items-center justify-center">
-            {children}
+        <div className=''>
+             <Navbar/>
+             {children}
         </div>
     );
 };

@@ -41,7 +41,7 @@ export default function RootLayout({
               <QueryProvider>
                 <ModalProvider />
                 <Toaster/>
-                <Navbar/>
+                
                 {children}
               </QueryProvider>
             </SocketProvider>

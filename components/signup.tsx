@@ -72,7 +72,8 @@ export function ProfileForm() {
         toast.success('Account successfully created,please verify otp');
         break;
       case 400:
-         alert('user alredy exist login to proceed')
+        toast.message('Account already exits please login to proceed');
+        router.push('/sign-in');
         break;
       default:
         if (result.status === 401) {
@@ -93,7 +94,7 @@ export function ProfileForm() {
   }
 
   return (
-    <section className="wrapper relative flex min-h-screen items-center justify-center overflow-hidden antialiased w-3/4">
+    <section className="wrapper relative flex min-h-screen items-center justify-center overflow-hidden antialiased ">
       <motion.div
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}

@@ -40,7 +40,7 @@ export  async function POST(
         if (bResult) {
           await db.profile.update({
             where: {userId: email },
-            data: { otp: otp.toString() , updatedAt : new Date(Date.now()) },
+            data: { otp: otp.toString() , otpExpiresAt : new Date(Date.now() + 5*60*1000) },//add 5 min expiry to otp
             
           });
           strError = "otp sent successfully";

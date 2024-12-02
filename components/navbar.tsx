@@ -60,7 +60,7 @@ export const Navbar = () => {
           damping: 10,
           stiffness: 100,
         }}
-        className="fixed h-1/12  w-full border-b border-primary/10 bg-background"
+        className="fixed  w-full border-b border-primary/10 bg-background z-50"
       >
         <div className="wrapper flex w-full items-center justify-between p-3">
           
@@ -87,7 +87,7 @@ export const Navbar = () => {
                   'https://logos-world.net/wp-content/uploads/2020/12/Discord-Emblem.png'
                 }
                 alt="100xDevs Logo"
-                className="w-1/12"
+                className=" w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12"
               />
               <p
                 className={`hidden bg-gradient-to-b from-blue-400 to-blue-700 bg-clip-text text-2xl font-black tracking-tighter text-transparent min-[375px]:block`}

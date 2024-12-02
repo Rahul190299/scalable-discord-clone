@@ -95,7 +95,8 @@ const formSchema = z.object({
     }
   
     return (
-      <motion.div
+      <section className="wrapper relative flex min-h-screen items-center justify-center overflow-hidden antialiased ">
+        <motion.div
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{
@@ -113,19 +114,31 @@ const formSchema = z.object({
               name="otp"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Otp</FormLabel>
+                  <FormLabel>Enter otp </FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter otp here" {...field} />
+                    <Input placeholder={`Enter otp here send at ${email}`} {...field} />
                   </FormControl>
   
                   <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
-            <Button type="submit">Verify</Button>
-            <Button onClick={fnSendOtp}></Button>
+            <Button size={'lg'}
+            variant={'branding'}
+            className=" w-full"
+             type="submit">Verify</Button>
+            
           </form>
         </Form>
+        <div>
+        <Button
+        size={'lg'}
+        variant={'branding'}
+        className=" w-full"
+        onClick={fnSendOtp}>Send otp</Button>
+        </div>
       </motion.div>
+      </section>
+      
     );
   }

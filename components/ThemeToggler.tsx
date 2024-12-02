@@ -8,6 +8,7 @@ export default function ThemeToggler() {
   const { theme, setTheme } = useTheme();
 
   const switchTheme = () => {
+    console.log(theme);
     switch (theme) {
       case 'light':
         setTheme('dark');

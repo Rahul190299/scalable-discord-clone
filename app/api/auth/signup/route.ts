@@ -36,7 +36,7 @@ export  async function POST(req: NextRequest) {
     });
 
     if (existingUser) {
-      return NextResponse.json({ message: 'User already exists' },{status : 200});
+      return NextResponse.json({ message: 'User already exists' },{status : 400});
     }
     //generate salt 
     const salt = await Auth.getSalt();
@@ -64,7 +64,7 @@ export  async function POST(req: NextRequest) {
         if(bRes){
           await db.profile.update({
             where: {userId: email },
-            data: { otp: otp.toString() },
+            data: { otp: otp.toString() ,otpExpiresAt : new Date(Date.now() + 5*60*1000) }, //add 5min expiry for otp
           });
           strError = "otp sent successfully";
         }
