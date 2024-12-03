@@ -1,12 +1,21 @@
 import { createUploadthing, type FileRouter } from 'uploadthing/next';
-import { auth } from '@clerk/nextjs';
+import { cookies } from 'next/headers'; // To access cookies in server-side component
+import cookie from 'cookie';
+import Auth from '@/lib/auth';
 
 const f = createUploadthing();
 
 const handleAuth = () => {
-    const { userId } = auth();
-    console.log(userId);
-    if (!userId) throw new Error('unauth');
+    const cookieStore = cookies();
+    const cookieString = cookieStore.get('Set-Cookie')?.value;
+    let user = null;
+    if(cookieString){
+        const parsedCookies = cookie.parse(cookieString || '');
+        user = Auth.verifySessionToken(parsedCookies.token);
+        
+    }
+    if (!user || !user.id) throw new Error('unauth');
+    const userId = user.id;
     return { userId };
 };
 

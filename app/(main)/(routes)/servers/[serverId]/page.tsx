@@ -13,7 +13,7 @@ interface ServerIdPageProps {
 const ServerIdPage: FC<ServerIdPageProps> = async ({ params }) => {
   const profile = await currentProfile();
 
-  if (!profile) return redirectToSignIn();
+  if (!profile) return redirect('/sign-in');;
 
   const server = await db.server.findUnique({
     where: {

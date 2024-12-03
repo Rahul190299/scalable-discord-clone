@@ -2,7 +2,6 @@ import { FC } from 'react';
 
 import { currentProfile } from '@/lib/current-profile';
 
-import { redirectToSignIn } from '@clerk/nextjs';
 import { db } from '@/lib/db';
 import { redirect } from 'next/navigation';
 import { getOrCreateConversation } from '@/lib/conversation';
@@ -20,7 +19,7 @@ interface MemberIdPageProps {
 const MemberIdPage: FC<MemberIdPageProps> = async ({ params }) => {
   const profile = await currentProfile();
 
-  if (!profile) return redirectToSignIn();
+  if (!profile) return redirect('/sign-in');
 
   const currentMember = await db.member.findFirst({
     where: {

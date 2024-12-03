@@ -1,6 +1,5 @@
 import { FC } from 'react';
 
-import { redirectToSignIn } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 
 import { currentProfile } from '@/lib/current-profile';
@@ -15,7 +14,7 @@ interface inviteCodeProps {
 const InviteCodePage: FC<inviteCodeProps> = async ({ params }) => {
     const profile = await currentProfile();
 
-    if (!profile) return redirectToSignIn();
+    if (!profile) return redirect('/sign-in');
 
     if (!params.inviteCode) return redirect('/');
 

@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { redirect } from 'next/navigation';
-import { redirectToSignIn } from '@clerk/nextjs';
+
 
 import { db } from '@/lib/db';
 import { currentProfile } from '@/lib/current-profile';
@@ -16,7 +16,7 @@ const ServerIdLayout: FC<serverIdLayoutProps> = async ({
     params,
 }) => {
     const profile = await currentProfile();
-    if (!profile) return redirectToSignIn();
+    if (!profile) return redirect('/sign-in');;
 
     const server = await db.server.findUnique({
         where: {
