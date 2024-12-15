@@ -1,13 +1,13 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { MemberRole, Members, Profile, Server } from '@prisma/client';
+import { MemberRole, Member, Profile, Server } from '@prisma/client';
 import { ShieldAlert, ShieldCheck } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { FC } from 'react';
 import UserAvatar from '../user-avatar';
 
 interface serverMemberProps {
-  member: Members & { profile: Profile };
+  member: Member & { profile: Profile };
   server: Server;
 }
 

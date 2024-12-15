@@ -16,7 +16,6 @@ import qs from 'query-string';
 import axios from 'axios';
 import { useModal } from '@/hooks/user-modal-store';
 import { useRouter, useParams } from 'next/navigation';
-import { auth } from '@clerk/nextjs';
 
 
 

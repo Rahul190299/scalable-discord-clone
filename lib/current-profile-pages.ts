@@ -1,17 +1,13 @@
-import { getAuth } from '@clerk/nextjs/server';
+import cookie from 'cookie';
 
 import { db } from '@/lib/db';
 import { NextApiRequest } from 'next';
+import { currentProfile } from './current-profile';
 
 export const currentProfilePages = async (req: NextApiRequest) => {
-  const { userId } = getAuth(req);
-
-  if (!userId) return null;
-
-  const profile = await db.profile.findUnique({
-    where: {
-      userId,
-    },
-  });
+  const cookies = cookie.parse(req.headers.cookie || '');
+  const profile = currentProfile(cookies["Set-Cookie"]);
+  
+  
   return profile;
 };

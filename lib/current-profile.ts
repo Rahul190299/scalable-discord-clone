@@ -5,12 +5,19 @@ import { cookies } from "next/headers"; // To access cookies in server-side comp
 import cookie from "cookie";
 import Auth from "@/lib/auth";
 
-export const currentProfile = async () => {
+export const currentProfile = async (reqCookie : string | any = null) => {
   try {
     let userId = null;
     let user = null;
-    const cookieStore = cookies();
-    const cookieString = cookieStore.get("Set-Cookie")?.value;
+    let cookieStore = null;
+    let cookieString = null;
+    if(reqCookie){
+      cookieString = reqCookie;
+    }
+    else{
+      cookieStore = cookies();
+      cookieString = cookieStore?.get("Set-Cookie")?.value;
+    }
     if (!cookieString) {
       return null;
     }
