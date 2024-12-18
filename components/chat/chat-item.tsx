@@ -16,6 +16,7 @@ import qs from 'query-string';
 import axios from 'axios';
 import { useModal } from '@/hooks/user-modal-store';
 import { useRouter, useParams } from 'next/navigation';
+import { useSessionStore } from '@/store/sessionstore';
 
 
 
@@ -55,7 +56,7 @@ const ChatItem: FC<ChatItemProps> = ({
   const { onOpen } = useModal();
   const params = useParams();
   const router = useRouter();
-  const { userId,email } = auth();
+  const email = useSessionStore((state) => state.email);
   const onMemberClick = () => {
     if (member.id === currentMember.id) return;
     router.push(`/servers/${params?.serverId}/conversation/${member.id}`);
@@ -206,7 +207,7 @@ const ChatItem: FC<ChatItemProps> = ({
                     </FormItem>
                   )}
                 />
-                <Button disabled={isLoading} size="sm" variant="primary">
+                <Button disabled={isLoading} size="sm" variant="branding">
                   Save
                 </Button>
               </form>
