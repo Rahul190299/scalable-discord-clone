@@ -3,7 +3,7 @@ import { Member, MemberRole, Profile } from '@prisma/client';
 import { FC, useEffect, useState } from 'react';
 import UserAvatar from '../user-avatar';
 import ActionTooltip from '../action-tooltip';
-import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from 'lucide-react';
+import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash,MessageSquare  } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { z } from 'zod';
@@ -221,14 +221,14 @@ const ChatItem: FC<ChatItemProps> = ({
       {canDeleteMessage && (
         <div className="hidden group-hover:flex items-center gap-x-2 absolute p-1 -top-2 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
           {canEditMessage && (
-            <ActionTooltip label="edit">
+            <ActionTooltip label="edit" side='top' align='start'>
               <Edit
                 onClick={() => setIsEditing(true)}
                 className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
               />
             </ActionTooltip>
           )}
-          <ActionTooltip label="delete">
+          <ActionTooltip label="delete" side='bottom'>
             <Trash
               onClick={() =>
                 onOpen('deleteMessage', {
