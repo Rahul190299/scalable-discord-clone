@@ -36,10 +36,7 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
 
   return (
     <div className="flex h-full">
-      <div className="basis-2/6 h-10 w-10">
-        <SearchResults/>
-      </div>
-      <div className="basis-4/6">
+      <div className="">
         <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
           <ChatHeader
             name={channel.name}
@@ -64,6 +61,9 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
             query={{ channelId: channel.id, serverId: channel.serverId }}
           />
         </div>
+      </div>
+      <div className="basis-2/6 h-10 w-10 ">
+        <SearchResults/>
       </div>
     </div>
   );
