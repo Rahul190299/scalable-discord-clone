@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import ChatHeader from "@/components/chat/chat-header";
 import ChatInput from "@/components/chat/chat-input";
 import ChatMessages from "@/components/chat/chat-messages";
-import { SearchResults } from "@/components/searchresults";
+import { SearchContainer } from "@/components/search-container";
 interface ChannelIdPageProps {
   params: {
     serverId: string;
@@ -62,9 +62,7 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
           />
         </div>
       </div>
-      <div className="basis-2/6 h-10 w-10 ">
-        <SearchResults/>
-      </div>
+      <SearchContainer/>
     </div>
   );
 };
