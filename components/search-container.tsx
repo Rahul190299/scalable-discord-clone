@@ -4,10 +4,10 @@ import { SearchResults } from "./searchresults";
 
 
 export  const SearchContainer = () => {
-    const [basis,setBasis] = useState('basis-0');
+    const [basis,setBasis] = useState('basis-auto');
     
     return (
-        <div className={`${basis} h-10 w-10 transition-all`}>
+        <div className={`${basis}`}>
          <SearchResults />
       </div>
     ) 
