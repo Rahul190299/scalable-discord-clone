@@ -36,7 +36,7 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
 
   return (
     <div className="flex h-full">
-      <div className="">
+      <div className="basis-full">
         <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
           <ChatHeader
             name={channel.name}
