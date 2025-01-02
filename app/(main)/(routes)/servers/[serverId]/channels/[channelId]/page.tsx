@@ -35,34 +35,39 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
   if (!channel || !member) redirect(`/`);
 
   return (
-    <div className="flex h-full">
-      <div className="basis-full">
-        <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
-          <ChatHeader
-            name={channel.name}
-            serverId={channel.serverId}
-            type="channel"
-          />
-          <ChatMessages
-            member={member}
-            name={channel.name}
-            chatId={channel.id}
-            type="channel"
-            apiUrl="/api/messages"
-            socketUrl="/api/socket/messages"
-            socketQuery={{ channelId: channel.id, serverId: channel.serverId }}
-            paramKey="channelId"
-            paramValue={channel.id}
-          />
-          <ChatInput
-            apiUrl="/api/socket/messages"
-            name={channel.name}
-            type="channel"
-            query={{ channelId: channel.id, serverId: channel.serverId }}
-          />
+    <div className="h-screen">
+      <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
+        <ChatHeader
+          name={channel.name}
+          serverId={channel.serverId}
+          type="channel"
+        />
+        <div className="flex flex-row ">
+          <div className="h-full">
+            <ChatMessages
+              member={member}
+              name={channel.name}
+              chatId={channel.id}
+              type="channel"
+              apiUrl="/api/messages"
+              socketUrl="/api/socket/messages"
+              socketQuery={{
+                channelId: channel.id,
+                serverId: channel.serverId,
+              }}
+              paramKey="channelId"
+              paramValue={channel.id}
+            />
+            <ChatInput
+              apiUrl="/api/socket/messages"
+              name={channel.name}
+              type="channel"
+              query={{ channelId: channel.id, serverId: channel.serverId }}
+            />
+          </div>
+          <SearchContainer />
         </div>
       </div>
-      <SearchContainer/>
     </div>
   );
 };
