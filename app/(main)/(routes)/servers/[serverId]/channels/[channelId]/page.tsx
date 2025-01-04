@@ -35,15 +35,15 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
   if (!channel || !member) redirect(`/`);
 
   return (
-    <div className="min-h-screen">
-      <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
+   
+      <div className="bg-white dark:bg-[#313338] h-screen">
         <ChatHeader
           name={channel.name}
           serverId={channel.serverId}
           type="channel"
         />
         <div className="flex h-full ">
-          <div className="basis-full ">
+          <div className="basis-full flex flex-col justify-end">
             <ChatMessages
               member={member}
               name={channel.name}
@@ -68,7 +68,7 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
           <SearchContainer />
         </div>
       </div>
-    </div>
+    
   );
 };
 
