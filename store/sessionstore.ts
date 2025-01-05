@@ -3,7 +3,7 @@ import {create} from 'zustand';
 interface userStore  {
     session : string,
     setSession : (session : string) => void;
-    userId :string,
+    userId : string,
     setUserId : (userId : string) => void,
     email : string,
     setEmail : (email : string) => void,

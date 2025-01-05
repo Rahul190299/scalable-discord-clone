@@ -60,7 +60,7 @@ const ChatInput: FC<ChatInputProps> = ({ apiUrl, name, query, type }) => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <div className="relative p-4 pb-6">
+                <div className="relative p-4 pb-6 ">
                   <button
                     type="button"
                     onClick={() => onOpen('messageFile', { apiUrl, query })}

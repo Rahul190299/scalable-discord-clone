@@ -11,7 +11,7 @@ const MainLayout: FC<mainLayoutProps> = ({ children }) => {
             <div className="hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0">
                 <NavigationSidebar />
             </div>
-            <main className="md:pl-[72px] h-screen border-yellow-500 border-2">{children}</main>
+            <main className="md:pl-[72px] h-screen ">{children}</main>
         </div>
     );
 };
