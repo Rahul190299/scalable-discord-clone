@@ -10,55 +10,26 @@ export async function GET(req: Request) {
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
 
-    const cursor = searchParams.get('cursor');
-    
-
+    const page = searchParams.get('page');
+    const channelId = searchParams.get('channelId')
     let searchKeyword = searchParams.get('keyword');
     if(!searchKeyword){
         searchKeyword = "";
     }
-    if (!profile) return new NextResponse('Unauth', { status: 401 });
+    if (!profile || ! channelId) return new NextResponse('Unauth', { status: 401 });
 
     let messages: Message[] = [];
-    if (cursor) {
-      messages = await db.message.findMany({
-        take: MESSAGES_BATCH,
-        skip: 1,
-        cursor: {
-          id: cursor,
+    let searchMessagesResults = db.message.count({
+      where : {
+        content : {
+          contains : searchKeyword,
+          
         },
-        where: {
-            content : {
-                contains : searchKeyword,
-              }
-        },
-        include: {
-          member: {
-            include: {
-              profile: true,
-            },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-      });
-    } else {
-      messages = await db.message.findMany({
-        take: MESSAGES_BATCH,
-        where: {
-          content : {
-            contains : searchKeyword,
-          }
-        },
-        include: {
-          member: {
-            include: {
-              profile: true,
-            },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-      });
-    }
+        channelId : channelId,
+        
+      }
+    });
+    
 
     let nextCursor = null;
 
