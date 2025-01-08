@@ -2,6 +2,7 @@ import { currentProfile } from '@/lib/current-profile';
 import { db } from '@/lib/db';
 import { Message } from '@prisma/client';
 import { NextResponse } from 'next/server';
+import { number, string } from 'zod';
 
 const MESSAGES_BATCH = 10;
 
@@ -16,20 +17,29 @@ export async function GET(req: Request) {
     if(!searchKeyword){
         searchKeyword = "";
     }
-    if (!profile || ! channelId) return new NextResponse('Unauth', { status: 401 });
+    if (!profile || ! channelId || !page) return new NextResponse('Unauth', { status: 401 });
 
     let messages: Message[] = [];
-    let searchMessagesResults = db.message.count({
+    let searchMessagesResults = await db.message.count({
       where : {
         content : {
           contains : searchKeyword,
           
         },
         channelId : channelId,
-        
-      }
+      },
     });
-    
+    messages = await db.message.findMany({
+      where : {
+        content : {
+          contains : searchKeyword,
+          
+        },
+        channelId : channelId,
+      },
+      orderBy : {createdAt : 'desc'},
+      take : searchMessagesResults/Number(page),
+    });
 
     let nextCursor = null;
 
