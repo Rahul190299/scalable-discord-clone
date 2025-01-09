@@ -2,9 +2,8 @@ import { currentProfile } from '@/lib/current-profile';
 import { db } from '@/lib/db';
 import { Message } from '@prisma/client';
 import { NextResponse } from 'next/server';
-import { number, string } from 'zod';
 
-const MESSAGES_BATCH = 10;
+const MESSAGES_BATCH = 20;
 
 export async function GET(req: Request) {
   try {
@@ -20,7 +19,7 @@ export async function GET(req: Request) {
     if (!profile || ! channelId || !page) return new NextResponse('Unauth', { status: 401 });
 
     let messages: Message[] = [];
-    let searchMessagesResults = await db.message.count({
+    let searchMessagesResultsCount = await db.message.count({
       where : {
         content : {
           contains : searchKeyword,
@@ -29,28 +28,36 @@ export async function GET(req: Request) {
         channelId : channelId,
       },
     });
-    messages = await db.message.findMany({
-      where : {
-        content : {
-          contains : searchKeyword,
-          
-        },
-        channelId : channelId,
-      },
-      orderBy : {createdAt : 'desc'},
-      take : searchMessagesResults/Number(page),
-    });
-
-    let nextCursor = null;
-
-    if (messages.length === MESSAGES_BATCH) {
-      nextCursor = messages[MESSAGES_BATCH - 1].id;
+    if(searchMessagesResultsCount == 0){
+      return NextResponse.json({
+        data : "No content",
+        count : 0,
+        currentPage : page,
+        totalPages : 0,
+      },{status : 200});
     }
-
-    return NextResponse.json({
-      items: messages,
-      nextCursor,
-    });
+    else{
+      messages = await db.message.findMany({
+        where : {
+          content : {
+            contains : searchKeyword,
+            
+          },
+          channelId : channelId,
+        },
+        orderBy : {createdAt : 'desc'},
+        take : MESSAGES_BATCH,
+        skip : (Number(page)-1)*MESSAGES_BATCH,
+        
+      });
+      return NextResponse.json({
+        data : messages,
+        count : searchMessagesResultsCount,
+        currentPage : page,
+        totalPages : Math.ceil(searchMessagesResultsCount/MESSAGES_BATCH),
+      },{status : 200});
+    }
+    
   } catch (error) {
     console.log('[Messages GET]', error);
     return new NextResponse('Internal Error', { status: 500 });
