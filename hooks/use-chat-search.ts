@@ -5,14 +5,14 @@ import { da } from "date-fns/locale";
 interface ChatQueryProps {
   queryKey: string;
   apiUrl: string;
-  paramKey: "channelId";
-  channelId: string;
+  paramKey: 'channelId' | 'conversationId';
+  paramValue: string;
 }
 
 export const useChatSearch = ({
   apiUrl,
   paramKey,
-  channelId,
+  paramValue,
   queryKey,
 }: ChatQueryProps) => {
   const searchMessages = async (queryKey : string) => {
@@ -21,7 +21,7 @@ export const useChatSearch = ({
         url: apiUrl,
         query: {
           page: queryKey,
-          [paramKey]: channelId,
+          [paramKey]: paramValue,
         },
       },
       { skipNull: true }
