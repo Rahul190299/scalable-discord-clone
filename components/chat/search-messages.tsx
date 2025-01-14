@@ -50,7 +50,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
       queryKey,
       apiUrl,
       paramKey,
-      channelId,
+      paramValue,
     });
     console.log(data);
   if (status === 'loading') {
@@ -77,24 +77,9 @@ const ChatMessages: FC<ChatMessagesProps> = ({
 
   return (
     <div ref={chatRef} className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
-      {!hasNextPage && <div className="flex-1" />}
-      {!hasNextPage && <ChatWelcome type={type} name={name} />}
-      {hasNextPage && (
-        <div className="flex justify-center">
-          {isFetchingNextPage ? (
-            <Loader2 className="h-6 w-6 text-zinc-500 animate-spin my-4" />
-          ) : (
-            <button
-              onClick={() => fetchNextPage()}
-              className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 text-xs my-4 dark:hover:text-zinc-300 transition"
-            >
-              Load previous messages
-            </button>
-          )}
-        </div>
-      )}
+      
       <div className="flex flex-col-reverse mt-auto">
-        {data?.pages?.map((group, i) => (
+        {data?.pages?.map((group :any, i:any) => (
           <Fragment key={i}>
             {group.items.map((message: MessageWithMemberWithProfile) => (
               <ChatItem
