@@ -35,40 +35,44 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
   if (!channel || !member) redirect(`/`);
 
   return (
-   
-      <div className="bg-white dark:bg-[#313338] h-screen">
-        <ChatHeader
-          name={channel.name}
-          serverId={channel.serverId}
-          type="channel"
-        />
-        <div className="flex h-full ">
-          <div className="basis-full flex flex-col justify-end">
-            <ChatMessages
-              member={member}
-              name={channel.name}
-              chatId={channel.id}
-              type="channel"
-              apiUrl="/api/messages"
-              socketUrl="/api/socket/messages"
-              socketQuery={{
-                channelId: channel.id,
-                serverId: channel.serverId,
-              }}
-              paramKey="channelId"
-              paramValue={channel.id}
-            />
-            <ChatInput
-              apiUrl="/api/socket/messages"
-              name={channel.name}
-              type="channel"
-              query={{ channelId: channel.id, serverId: channel.serverId }}
-            />
-          </div>
-          <SearchContainer />
+    <div className="bg-white dark:bg-[#313338] h-screen">
+      <ChatHeader
+        name={channel.name}
+        serverId={channel.serverId}
+        type="channel"
+      />
+      <div className="flex h-full ">
+        <div className="basis-full flex flex-col justify-end">
+          <ChatMessages
+            member={member}
+            name={channel.name}
+            chatId={channel.id}
+            type="channel"
+            apiUrl="/api/messages"
+            socketUrl="/api/socket/messages"
+            socketQuery={{
+              channelId: channel.id,
+              serverId: channel.serverId,
+            }}
+            paramKey="channelId"
+            paramValue={channel.id}
+          />
+          <ChatInput
+            apiUrl="/api/socket/messages"
+            name={channel.name}
+            type="channel"
+            query={{ channelId: channel.id, serverId: channel.serverId }}
+          />
         </div>
+        <SearchContainer
+          member={member}
+          chatId={channel.id}
+          apiUrl="/api/search-messages"
+          paramKey="channelId"
+          paramValue={channel.id}
+        />
       </div>
-    
+    </div>
   );
 };
 
