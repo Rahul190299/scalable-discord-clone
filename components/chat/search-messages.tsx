@@ -15,32 +15,23 @@ type MessageWithMemberWithProfile = Message & {
 
 const DATE_FORMAT = 'd MMM yyyy, HH:mm';
 
-interface ChatMessagesProps {
-  name: string;
+interface SearchMessagesProps {
   member: Member;
   chatId: string;
   apiUrl: string;
-  socketUrl: string;
-  socketQuery: Record<string, string>;
   paramKey: 'channelId';
   paramValue: string;
-  type: 'channel' | 'conversation';
 }
 
-const ChatMessages: FC<ChatMessagesProps> = ({
+const SearchMessagesResult: FC<SearchMessagesProps> = ({
   apiUrl,
   chatId,
   member,
-  name,
   paramKey,
   paramValue,
-  socketQuery,
-  socketUrl,
-  type,
 }) => {
   const queryKey = `chat:${chatId}`;
-  const addKey = `chat:${chatId}:messages`;
-  const updateKey = `chat:${chatId}:messages:update`;
+  
 
   const chatRef = useRef<ElementRef<'div'>>(null);
   const bottomRef = useRef<ElementRef<'div'>>(null);
@@ -69,7 +60,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
       <div className="flex flex-col flex-1 justify-center items-center">
         <ServerCrash className="h-7 w-7 text-zinc-500 my-4" />
         <p className="text-xs text-zinc-500 dark:text-zinc-400">
-          Something went wrong!
+          {`${error}`}
         </p>
       </div>
     );
@@ -92,8 +83,8 @@ const ChatMessages: FC<ChatMessagesProps> = ({
                 deleted={message.deleted}
                 timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
                 isUpdate={message.updatedAt !== message.createdAt}
-                socketUrl={socketUrl}
-                socketQuery={socketQuery}
+                socketUrl=''
+                socketQuery= { {" ": ""} }
               />
             ))}
           </Fragment>
@@ -104,4 +95,4 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   );
 };
 
-export default ChatMessages;
+export default SearchMessagesResult;

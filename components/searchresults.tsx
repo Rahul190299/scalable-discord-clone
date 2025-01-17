@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import SearchMessagesResult from "./chat/search-messages";
 import Spinner from "./ui/spinner";
 export const SearchResults = () => {
   const [activeButton, setActiveButton] = useState("old"); // Track the active button
@@ -8,12 +9,12 @@ export const SearchResults = () => {
   return (
     <div>
       <div className="flex justify-around bg-gray-200 p-1">
-        <div >
+        <div>
           {loading ? (
-             <div className="flex justify-center my-2">
+            <div className="flex justify-center my-2">
               <span>Searching</span>
               <Spinner />
-             </div>
+            </div>
           ) : (
             <span>{result} Results</span>
           )}
@@ -42,7 +43,20 @@ export const SearchResults = () => {
           {/* <button>Relevant</button> */}
         </div>
       </div>
-      <div className=""></div>
+      <SearchMessagesResult
+        member={member}
+        name={channel.name}
+        chatId={channel.id}
+        type="channel"
+        apiUrl="/api/messages"
+        socketUrl="/api/socket/messages"
+        socketQuery={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
+        paramKey="channelId"
+        paramValue={channel.id}
+      />
     </div>
   );
 };
