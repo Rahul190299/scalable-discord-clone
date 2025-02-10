@@ -1,8 +1,20 @@
 "use client";
 import { useState } from "react";
+import { Dispatch, ElementRef, FC, Fragment, SetStateAction, useRef } from 'react';
 import SearchMessagesResult from "./chat/search-messages";
 import Spinner from "./ui/spinner";
-export const SearchResults = () => {
+import { Member, Message, Profile } from '@prisma/client';
+
+
+interface SearchMessagesProps {
+  member: Member;
+  chatId: string;
+  apiUrl: string;
+  paramKey: 'channelId';
+  paramValue: string;
+  setLoading : Dispatch<SetStateAction<boolean>>;
+}
+export const SearchResults = (props:SearchMessagesProps) => {
   const [activeButton, setActiveButton] = useState("old"); // Track the active button
   const [result, setResults] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -44,8 +56,8 @@ export const SearchResults = () => {
         </div>
       </div>
       <SearchMessagesResult
-        member={member}
-        name={channel.name}
+        member={props.member}
+        name={.name}
         chatId={channel.id}
         type="channel"
         apiUrl="/api/messages"
@@ -56,6 +68,7 @@ export const SearchResults = () => {
         }}
         paramKey="channelId"
         paramValue={channel.id}
+        setLoading = {setLoading}
       />
     </div>
   );
