@@ -1,6 +1,6 @@
 'use client';
 import { Member, Message, Profile } from '@prisma/client';
-import { ElementRef, FC, Fragment, useRef } from 'react';
+import { Dispatch, ElementRef, FC, Fragment, SetStateAction, useRef } from 'react';
 import ChatWelcome from './chat-welcome';
 import { Loader2, ServerCrash } from 'lucide-react';
 import { useChatSearch } from '@/hooks/use-chat-search';
@@ -21,6 +21,7 @@ interface SearchMessagesProps {
   apiUrl: string;
   paramKey: 'channelId';
   paramValue: string;
+  setLoading : Dispatch<SetStateAction<boolean>>;
 }
 
 const SearchMessagesResult: FC<SearchMessagesProps> = ({
