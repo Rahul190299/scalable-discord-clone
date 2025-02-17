@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Dispatch, ElementRef, FC, Fragment, SetStateAction, useRef } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import SearchMessagesResult from "./chat/search-messages";
 import Spinner from "./ui/spinner";
 import { Member, Message, Profile } from '@prisma/client';
@@ -8,7 +8,7 @@ import { Member, Message, Profile } from '@prisma/client';
 
 interface SearchMessagesProps {
   member: Member;
-  chatId: string;
+  currentPage: number;
   apiUrl: string;
   paramKey: 'channelId';
   paramValue: string;
@@ -57,17 +57,10 @@ export const SearchResults = (props:SearchMessagesProps) => {
       </div>
       <SearchMessagesResult
         member={props.member}
-        name={.name}
-        chatId={channel.id}
-        type="channel"
-        apiUrl="/api/messages"
-        socketUrl="/api/socket/messages"
-        socketQuery={{
-          channelId: channel.id,
-          serverId: channel.serverId,
-        }}
+        currentPage={props.currentPage}
+        apiUrl="/api/search-messages"
         paramKey="channelId"
-        paramValue={channel.id}
+        paramValue={props.chatId}
         setLoading = {setLoading}
       />
     </div>

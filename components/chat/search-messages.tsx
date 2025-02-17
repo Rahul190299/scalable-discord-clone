@@ -17,7 +17,7 @@ const DATE_FORMAT = 'd MMM yyyy, HH:mm';
 
 interface SearchMessagesProps {
   member: Member;
-  chatId: string;
+  currentPage: number;
   apiUrl: string;
   paramKey: 'channelId';
   paramValue: string;
@@ -26,12 +26,12 @@ interface SearchMessagesProps {
 
 const SearchMessagesResult: FC<SearchMessagesProps> = ({
   apiUrl,
-  chatId,
+  currentPage,
   member,
   paramKey,
   paramValue,
 }) => {
-  const queryKey = `chat:${chatId}`;
+  //const queryKey = `chat:${chatId}`;
   
 
   const chatRef = useRef<ElementRef<'div'>>(null);
@@ -39,7 +39,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   console.log(apiUrl);
   const { data,error, status } =
     useChatSearch({
-      queryKey,
+      currentPage,
       apiUrl,
       paramKey,
       paramValue,
