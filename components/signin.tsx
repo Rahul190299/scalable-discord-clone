@@ -118,7 +118,7 @@ export function SignInForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input className = "focus:ring-none border-none bg-primary/5 focus:outline-none" placeholder="password" {...field} />
+                    <Input type="password" className = "focus:ring-none border-none bg-primary/5 focus:outline-none" placeholder="password" {...field} />
                   </FormControl>
 
                   <FormMessage className="text-red-500" />

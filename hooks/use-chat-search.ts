@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { da } from "date-fns/locale";
 
 interface ChatQueryProps {
-  queryKey: string;
+  currentPage: number;
   apiUrl: string;
   paramKey: 'channelId' | 'conversationId';
   paramValue: string;
@@ -13,26 +13,27 @@ export const useChatSearch = ({
   apiUrl,
   paramKey,
   paramValue,
-  queryKey,
+  currentPage,
 }: ChatQueryProps) => {
-  const searchMessages = async (queryKey : string) => {
+  const searchMessages = async (currentPage : number) => {
     const url = qs.stringifyUrl(
       {
         url: apiUrl,
         query: {
-          page: queryKey,
+          page: currentPage,
           [paramKey]: paramValue,
         },
       },
       { skipNull: true }
     );
+    console.log("search api url" + apiUrl);
     const res = await fetch(url);
     return res.json();
   };
 
   const { status, error, data } = useQuery({
-    queryKey: [queryKey],
-    queryFn: ({queryKey}) =>  searchMessages(queryKey[0]),
+    queryKey: [currentPage],
+    queryFn: ({queryKey}) =>  searchMessages(currentPage),
     staleTime : 500,
   });
   return {status,error,data}; 
