@@ -1,6 +1,6 @@
 'use client';
 import { Member, Message, Profile } from '@prisma/client';
-import { Dispatch, ElementRef, FC, Fragment, SetStateAction, useRef } from 'react';
+import { Dispatch, ElementRef, FC, Fragment, SetStateAction, useRef, useState } from 'react';
 import ChatWelcome from './chat-welcome';
 import { Loader2, ServerCrash } from 'lucide-react';
 import { useChatSearch } from '@/hooks/use-chat-search';
@@ -8,6 +8,7 @@ import ChatItem from './chat-item';
 import { format } from 'date-fns';
 import { useChatSocket } from '@/hooks/use-chat-socket';
 import { useChatScroll } from '@/hooks/use-chat-scroll';
+import { useScroll } from 'framer-motion';
 
 type MessageWithMemberWithProfile = Message & {
   member: Member & { profile: Profile };
@@ -17,7 +18,6 @@ const DATE_FORMAT = 'd MMM yyyy, HH:mm';
 
 interface SearchMessagesProps {
   member: Member;
-  currentPage: number;
   apiUrl: string;
   paramKey: 'channelId';
   paramValue: string;
@@ -26,13 +26,12 @@ interface SearchMessagesProps {
 
 const SearchMessagesResult: FC<SearchMessagesProps> = ({
   apiUrl,
-  currentPage,
   member,
   paramKey,
   paramValue,
 }) => {
   //const queryKey = `chat:${chatId}`;
-  
+  const [currentPage,setCurrentPage] = useState(0);
 
   const chatRef = useRef<ElementRef<'div'>>(null);
   const bottomRef = useRef<ElementRef<'div'>>(null);

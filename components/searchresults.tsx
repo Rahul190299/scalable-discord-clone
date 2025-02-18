@@ -8,11 +8,9 @@ import { Member, Message, Profile } from '@prisma/client';
 
 interface SearchMessagesProps {
   member: Member;
-  currentPage: number;
   apiUrl: string;
   paramKey: 'channelId';
   paramValue: string;
-  setLoading : Dispatch<SetStateAction<boolean>>;
 }
 export const SearchResults = (props:SearchMessagesProps) => {
   const [activeButton, setActiveButton] = useState("old"); // Track the active button
@@ -57,10 +55,9 @@ export const SearchResults = (props:SearchMessagesProps) => {
       </div>
       <SearchMessagesResult
         member={props.member}
-        currentPage={props.currentPage}
         apiUrl="/api/search-messages"
         paramKey="channelId"
-        paramValue={props.chatId}
+        paramValue={props.paramValue}
         setLoading = {setLoading}
       />
     </div>
