@@ -8,14 +8,12 @@ import { ElementRef, FC, Fragment, useRef } from 'react';
 
 interface SearchMessagesProps {
   member: Member;
-  chatId: string;
   apiUrl: string;
   paramKey: 'channelId';
   paramValue: string;
 }
 export const SearchContainer : FC<SearchMessagesProps> = ({
   apiUrl,
-  chatId,
   member,
   paramKey,
   paramValue,
@@ -24,7 +22,11 @@ export const SearchContainer : FC<SearchMessagesProps> = ({
   return (
     showSearchPane && (
       <div className="basis-2/5">
-        <SearchResults  />
+        <SearchResults 
+        member={member}
+        apiUrl="/api/search-messages"
+        paramKey="channelId"
+        paramValue={paramValue} />
       </div>
     )
   );

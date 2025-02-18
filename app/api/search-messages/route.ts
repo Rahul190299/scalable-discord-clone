@@ -37,6 +37,10 @@ export async function GET(req: Request) {
       },{status : 200});
     }
     else{
+      let skip = (Number(page)-1)*MESSAGES_BATCH;
+      if(skip < MESSAGES_BATCH){
+        skip = 0;
+      }
       messages = await db.message.findMany({
         where : {
           content : {
@@ -47,7 +51,7 @@ export async function GET(req: Request) {
         },
         orderBy : {createdAt : 'desc'},
         take : MESSAGES_BATCH,
-        skip : (Number(page)-1)*MESSAGES_BATCH,
+        skip : skip,
         
       });
       return NextResponse.json({
