@@ -55,7 +55,7 @@ export async function GET(req: Request) {
         
       });
       return NextResponse.json({
-        data : messages,
+        items : messages,
         count : searchMessagesResultsCount,
         currentPage : page,
         totalPages : Math.ceil(searchMessagesResultsCount/MESSAGES_BATCH),

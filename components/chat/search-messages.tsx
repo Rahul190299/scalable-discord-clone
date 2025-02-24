@@ -42,8 +42,9 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
       apiUrl,
       paramKey,
       paramValue,
+
     });
-    console.log(data);
+    console.log("search messages data => "+data.messages);
   if (status === 'loading') {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
@@ -70,7 +71,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
     <div ref={chatRef} className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
       
       <div className="flex flex-col-reverse mt-auto">
-        {data?.pages?.map((group :any, i:any) => (
+        {data?.messages?.map((group :any, i:any) => (
           <Fragment key={i}>
             {group.items.map((message: MessageWithMemberWithProfile) => (
               <ChatItem
