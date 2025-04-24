@@ -49,13 +49,20 @@ export async function GET(req: Request) {
           },
           channelId : channelId,
         },
+        include: {
+          member: {
+            include: {
+              profile: true,
+            },
+          },
+        },
         orderBy : {createdAt : 'desc'},
         take : MESSAGES_BATCH,
         skip : skip,
         
       });
       return NextResponse.json({
-        items : messages,
+        messages : messages,
         count : searchMessagesResultsCount,
         currentPage : page,
         totalPages : Math.ceil(searchMessagesResultsCount/MESSAGES_BATCH),

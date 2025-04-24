@@ -30,13 +30,15 @@ export const useChatSearch = ({
     );
     console.log("search api url" + apiUrl);
     const res = await fetch(url);
-    
-    return await res.json();
+    let searchMessages = await res.json();
+    console.log("search result " + searchMessages);
+    return searchMessages;
   };
 
   const { status, error, data } = useQuery({
-    queryKey: [currentPage],
-    queryFn: ({queryKey}) =>  searchMessages(currentPage.toString()),
+    queryKey: [currentPage + searchText],
+    queryFn: () =>  searchMessages(currentPage.toString()),
+    cacheTime: 0,   
   });
   return {status,error,data}; 
 };
