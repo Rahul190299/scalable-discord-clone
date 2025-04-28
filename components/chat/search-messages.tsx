@@ -1,14 +1,10 @@
 'use client';
 import { Member, Message, Profile } from '@prisma/client';
 import { Dispatch, ElementRef, FC, Fragment, SetStateAction, useRef, useState } from 'react';
-import ChatWelcome from './chat-welcome';
 import { Loader2, ServerCrash } from 'lucide-react';
 import { useChatSearch } from '@/hooks/use-chat-search';
 import ChatItem from './chat-item';
 import { format } from 'date-fns';
-import { useChatSocket } from '@/hooks/use-chat-socket';
-import { useChatScroll } from '@/hooks/use-chat-scroll';
-import { useScroll } from 'framer-motion';
 
 type MessageWithMemberWithProfile = Message & {
   member: Member & { profile: Profile };
@@ -29,6 +25,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   member,
   paramKey,
   paramValue,
+  setLoading
 }) => {
   //const queryKey = `chat:${chatId}`;
   const [currentPage,setCurrentPage] = useState(0);
@@ -44,7 +41,8 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
       paramValue,
 
     });
-    console.log(data);
+    
+    //console.log(data);
   if (status === 'loading') {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
@@ -66,8 +64,9 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
       </div>
     );
   }
-
+  setLoading(false);
   return (
+    
     <div ref={chatRef} className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
       
       <div className="flex flex-col-reverse mt-auto">

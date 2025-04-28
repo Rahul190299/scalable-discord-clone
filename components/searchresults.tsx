@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction } from 'react';
 import SearchMessagesResult from "./chat/search-messages";
 import Spinner from "./ui/spinner";
 import { Member, Message, Profile } from '@prisma/client';
+import { useSearchMessagesStore } from "@/store/searchstore";
 
 
 interface SearchMessagesProps {
@@ -16,17 +17,18 @@ export const SearchResults = (props:SearchMessagesProps) => {
   const [activeButton, setActiveButton] = useState("old"); // Track the active button
   const [result, setResults] = useState(0);
   const [loading, setLoading] = useState(true);
+  const {searchingMessages ,searchMessagesCount} = useSearchMessagesStore();
   return (
     <div>
       <div className="flex justify-around bg-gray-200 p-1">
         <div>
-          {loading ? (
+          {searchingMessages ? (
             <div className="flex justify-center my-2">
               <span>Searching</span>
               <Spinner />
             </div>
           ) : (
-            <span>{result} Results</span>
+            <span>{searchMessagesCount} Results</span>
           )}
         </div>
         <div className="flex justify-center">

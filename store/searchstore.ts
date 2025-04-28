@@ -13,3 +13,19 @@ export const useSearchStore = create<searchStoreInterface>((set) => ({
     searchText : "",
     setSearchText : (searchText) => set({searchText : searchText}),
 }))
+
+interface searchMessagesStoreInterface {
+    searchMessagesCount : number,
+    setSearchMessagesCount : (searchMessagesCount : number) => void,
+    searchingMessages : boolean,
+    setSearchingMessages : (searchingMessages : boolean) => void,
+
+}
+
+export const useSearchMessagesStore = create<searchMessagesStoreInterface>((set) => ({
+    searchMessagesCount : 0,
+    setSearchMessagesCount : (searchMessagesCount) => set({searchMessagesCount : searchMessagesCount}),
+    searchingMessages : false,
+    setSearchingMessages : (searchingMessages) => set({searchingMessages : searchingMessages}),
+
+}));
