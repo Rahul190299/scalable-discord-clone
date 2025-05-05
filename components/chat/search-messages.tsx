@@ -18,6 +18,7 @@ interface SearchMessagesProps {
   paramKey: 'channelId';
   paramValue: string;
   setLoading : Dispatch<SetStateAction<boolean>>;
+  setMessageCount : Dispatch<SetStateAction<number>>;
 }
 
 const SearchMessagesResult: FC<SearchMessagesProps> = ({
@@ -25,7 +26,8 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   member,
   paramKey,
   paramValue,
-  setLoading
+  setLoading,
+  setMessageCount,
 }) => {
   //const queryKey = `chat:${chatId}`;
   const [currentPage,setCurrentPage] = useState(0);
@@ -65,6 +67,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
     );
   }
   setLoading(false);
+  setMessageCount(data?.messages?.length);
   return (
     
     <div ref={chatRef} className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
