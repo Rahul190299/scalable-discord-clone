@@ -47,27 +47,7 @@ export const SearchResults = (props:SearchMessagesProps) => {
       >
         New
       </Button>
-          {/* <button
-            className={`px-4 rounded 
-                      ${
-                        activeButton === "old"
-                          ? "bg-gray-300"
-                          : "bg-gray-200 text-gray-700"
-                      }`}
-          >
-            New
-          </button>
-          <button
-            className={`px-4 mx-2 rounded 
-            ${
-              activeButton === "new"
-                ? "bg-gray-300"
-                : "bg-gray-200 text-gray-700"
-            }`}
-          >
-            Old
-          </button> */}
-          {/* <button>Relevant</button> */}
+          
         </div>
       </div>
       <SearchMessagesResult

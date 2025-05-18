@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        toggle: "dark:bg-gray-500 light:bg-gray-100 text-zinc-200 hover:bg-zinc-700 hover:text-white",
+        toggle: "dark:bg-gray-700 light:bg-gray-100 text-zinc-200 hover:bg-zinc-700 hover:text-white",
         branding:
           'bg-gradient-to-b from-blue-400 to-blue-700 text-white font-medium hover:opacity-80 transition-all duration-300',
       },
