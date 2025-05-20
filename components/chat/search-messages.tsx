@@ -5,6 +5,7 @@ import { Loader2, ServerCrash } from 'lucide-react';
 import { useChatSearch } from '@/hooks/use-chat-search';
 import ChatItem from './chat-item';
 import { format } from 'date-fns';
+import { Pagination } from '../Searching/pagination';
 
 type MessageWithMemberWithProfile = Message & {
   member: Member & { profile: Profile };
@@ -30,7 +31,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   setMessageCount,
 }) => {
   //const queryKey = `chat:${chatId}`;
-  const [currentPage,setCurrentPage] = useState(0);
+  const [currentPage,setCurrentPage] = useState(1);
 
   const chatRef = useRef<ElementRef<'div'>>(null);
   const bottomRef = useRef<ElementRef<'div'>>(null);
@@ -69,7 +70,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   setLoading(false);
   setMessageCount(data?.messages?.length);
   return (
-    
+    <>
     <div ref={chatRef} className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
       
       <div className="flex flex-col-reverse mt-auto">
@@ -87,13 +88,18 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
                 isUpdate={message.updatedAt !== message.createdAt}
                 socketUrl=''
                 socketQuery= { {" ": ""} }
-              />
-            
+            />
           </Fragment>
         ))}
+
       </div>
       <div ref={bottomRef} />
     </div>
+    <Pagination totalPages={data?.messages?.length} setSelectedPage={setCurrentPage} currentSelectedPage={currentPage}/>
+   </>
+    
+
+
   );
 };
 
