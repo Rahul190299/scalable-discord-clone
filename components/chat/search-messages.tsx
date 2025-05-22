@@ -68,7 +68,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
     );
   }
   setLoading(false);
-  setMessageCount(data?.messages?.length);
+  setMessageCount(data?.count);
   return (
     <>
     <div ref={chatRef} className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
