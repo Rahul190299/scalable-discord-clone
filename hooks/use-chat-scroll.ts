@@ -16,21 +16,23 @@ export const useChatScroll = ({
   shouldLoadMore,
 }: ChatScrollProps) => {
   const [hasInitialized, setHasInitialized] = useState(false);
-
+  console.log("in useChatScroll shouldLoadMore =>" + shouldLoadMore);
   useEffect(() => {
     const topDiv = chatRef?.current;
 
     const handleScroll = () => {
       const scrollTop = topDiv?.scrollTop;
-
+      console.log("in handle scroll");
       if (scrollTop === 0 && shouldLoadMore) {
+        console.log("in handle scroll loadMore will called");
         loadMore();
       }
     };
-
+    console.log("top div => " + topDiv?.className);
     topDiv?.addEventListener('scroll', handleScroll);
 
     return () => {
+      console.log("in return");
       topDiv?.removeEventListener('scroll', handleScroll);
     };
   }, [shouldLoadMore, loadMore, chatRef]);

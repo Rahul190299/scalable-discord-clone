@@ -46,7 +46,7 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
       </div>
       
       <div className="flex min-h-screen">
-        <div className="basis-full flex flex-col justify-end">
+        <div className="basis-full min-h-screen">
           <ChatMessages
             member={member}
             name={channel.name}
@@ -68,13 +68,16 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
             query={{ channelId: channel.id, serverId: channel.serverId }}
           />
         </div>
-        <SearchContainer
+        <div className="overflow-y-auto h-screen">
+          <SearchContainer
           member={member}
           chatId={channel.id}
           apiUrl="/api/search-messages"
           paramKey="channelId"
           paramValue={channel.id}
-        />
+          />
+        </div>
+        
       </div>
     </div>
   );
