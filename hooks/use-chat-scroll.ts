@@ -15,27 +15,37 @@ export const useChatScroll = ({
   loadMore,
   shouldLoadMore,
 }: ChatScrollProps) => {
-  const [hasInitialized, setHasInitialized] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(true);
+  const [loading, setLoading] = useState(false);
   console.log("in useChatScroll shouldLoadMore =>" + shouldLoadMore);
   useEffect(() => {
     const topDiv = chatRef?.current;
 
     const handleScroll = () => {
       const scrollTop = topDiv?.scrollTop;
-      console.log("in handle scroll");
+      //console.log("in handle scroll");
       if (scrollTop === 0 && shouldLoadMore) {
-        console.log("in handle scroll loadMore will called");
-        loadMore();
+        setLoading(true);
+        if(loading){
+          setLoading(false);
+          loadMore();
+          console.log("in handle scroll loadMore will called");
+          
+          setTimeout(() => {
+            setLoading(true);
+          }, 1000);
+        }
+        
       }
     };
-    console.log("top div => " + topDiv?.className);
-    topDiv?.addEventListener('scroll', handleScroll);
+    console.log("top div => " + topDiv?.scrollHeight + " client height => " + topDiv?.clientHeight);
+    topDiv?.addEventListener('wheel', handleScroll);
 
     return () => {
       console.log("in return");
       topDiv?.removeEventListener('scroll', handleScroll);
     };
-  }, [shouldLoadMore, loadMore, chatRef]);
+  }, [shouldLoadMore, loadMore, chatRef,loading]);
 
   useEffect(() => {
     const bottomDiv = bottomRef?.current;

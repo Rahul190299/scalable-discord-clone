@@ -7,11 +7,11 @@ interface mainLayoutProps {
 
 const MainLayout: FC<mainLayoutProps> = ({ children }) => {
     return (
-        <div className="h-screen ">
-            <div className="hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0">
+        <div className="">
+            <div className="hidden md:flex  w-[72px] z-30 flex-col fixed inset-y-0">
                 <NavigationSidebar />
             </div>
-            <main className="md:pl-[72px] h-screen ">{children}</main>
+            <main className="md:pl-[72px]  ">{children}</main>
         </div>
     );
 };

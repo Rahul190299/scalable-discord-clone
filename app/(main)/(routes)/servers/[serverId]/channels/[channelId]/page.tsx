@@ -45,7 +45,7 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
         />
       </div>
       
-      <div className="flex min-h-screen">
+      <div className="flex ">
         <div className="basis-full min-h-screen">
           <ChatMessages
             member={member}
