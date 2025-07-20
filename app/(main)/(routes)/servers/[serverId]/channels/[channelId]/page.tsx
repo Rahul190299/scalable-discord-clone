@@ -35,7 +35,7 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
   if (!channel || !member) redirect(`/`);
 
   return (
-    <div className="bg-white dark:bg-[#313338]">
+    <div className="bg-white dark:bg-[#313338]   border-2">
       <div className="sticky top-0 z-50 dark:bg-white">
         <ChatHeader
           name={channel.name}
@@ -45,8 +45,8 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
         />
       </div>
       
-      <div className="flex ">
-        <div className="basis-full min-h-screen">
+      <div className=" flex">
+        <div className="basis-full ">
           <ChatMessages
             member={member}
             name={channel.name}

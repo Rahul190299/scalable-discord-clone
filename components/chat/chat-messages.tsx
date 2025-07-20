@@ -1,19 +1,19 @@
-'use client';
-import { Member, Message, Profile } from '@prisma/client';
-import { ElementRef, FC, Fragment, useRef } from 'react';
-import ChatWelcome from './chat-welcome';
-import { useChatQuery } from '@/hooks/use-chat-query';
-import { Loader2, ServerCrash } from 'lucide-react';
-import ChatItem from './chat-item';
-import { format } from 'date-fns';
-import { useChatSocket } from '@/hooks/use-chat-socket';
-import { useChatScroll } from '@/hooks/use-chat-scroll';
+"use client";
+import { Member, Message, Profile } from "@prisma/client";
+import { ElementRef, FC, Fragment, useRef } from "react";
+import ChatWelcome from "./chat-welcome";
+import { useChatQuery } from "@/hooks/use-chat-query";
+import { Loader2, ServerCrash } from "lucide-react";
+import ChatItem from "./chat-item";
+import { format } from "date-fns";
+import { useChatSocket } from "@/hooks/use-chat-socket";
+import { useChatScroll } from "@/hooks/use-chat-scroll";
 
 type MessageWithMemberWithProfile = Message & {
   member: Member & { profile: Profile };
 };
 
-const DATE_FORMAT = 'd MMM yyyy, HH:mm';
+const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
 interface ChatMessagesProps {
   name: string;
@@ -22,9 +22,9 @@ interface ChatMessagesProps {
   apiUrl: string;
   socketUrl: string;
   socketQuery: Record<string, string>;
-  paramKey: 'channelId' | 'conversationId';
+  paramKey: "channelId" | "conversationId";
   paramValue: string;
-  type: 'channel' | 'conversation';
+  type: "channel" | "conversation";
 }
 
 const ChatMessages: FC<ChatMessagesProps> = ({
@@ -42,8 +42,8 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   const addKey = `chat:${chatId}:messages`;
   const updateKey = `chat:${chatId}:messages:update`;
 
-  const chatRef = useRef<ElementRef<'div'>>(null);
-  const bottomRef = useRef<ElementRef<'div'>>(null);
+  const chatRef = useRef<ElementRef<"div">>(null);
+  const bottomRef = useRef<ElementRef<"div">>(null);
   console.log(apiUrl);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
@@ -52,7 +52,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
       paramKey,
       paramValue,
     });
-    console.log(data);
+  console.log(data);
   useChatSocket({ queryKey, addKey, updateKey });
   useChatScroll({
     chatRef,
@@ -62,7 +62,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
     count: data?.pages?.[0]?.items?.length ?? 0,
   });
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
         <Loader2 className="h-7 w-7 text-zinc-500 animate-spin my-4" />
@@ -73,7 +73,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
     );
   }
 
-  if (status === 'error') {
+  if (status === "error") {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
         <ServerCrash className="h-7 w-7 text-zinc-500 my-4" />
@@ -85,45 +85,50 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   }
 
   return (
-    <div ref={chatRef} className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
-      {!hasNextPage && <div className="flex-1" />}
-      {!hasNextPage && <ChatWelcome type={type} name={name} />}
-      {hasNextPage && (
-        <div className="flex justify-center">
-          {isFetchingNextPage ? (
-            <Loader2 className="h-6 w-6 text-zinc-500 animate-spin my-4" />
-          ) : (
-            <button
-              onClick={() => fetchNextPage()}
-              className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 text-xs my-4 dark:hover:text-zinc-300 transition"
-            >
-              Load previous messages
-            </button>
-          )}
+    <div className=" flex flex-col justify-end   h-screen ">
+      <div ref={chatRef} className="overflow-y-auto ">
+        {!hasNextPage && <div className="flex-1" />}
+        {!hasNextPage && <ChatWelcome type={type} name={name} />}
+        {hasNextPage && (
+          <div className="flex justify-center">
+            {isFetchingNextPage ? (
+              <Loader2 className="h-6 w-6 text-zinc-500 animate-spin my-4" />
+            ) : (
+              <button
+                onClick={() => fetchNextPage()}
+                className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 text-xs my-4 dark:hover:text-zinc-300 transition"
+              >
+                Load previous messages
+              </button>
+            )}
+          </div>
+        )}
+        {/* <div ref={chatRef} className="overflow-y-auto"> */}
+        <div className="flex flex-1 flex-col-reverse py-4 justify-end">
+          {data?.pages?.map((group, i) => (
+            <Fragment key={i}>
+              {group.items.map((message: MessageWithMemberWithProfile) => (
+                <ChatItem
+                  key={message.id}
+                  id={message.id}
+                  currentMember={member}
+                  content={message.content}
+                  member={message.member}
+                  fileUrl={message.fileUrl}
+                  deleted={message.deleted}
+                  timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
+                  isUpdate={message.updatedAt !== message.createdAt}
+                  socketUrl={socketUrl}
+                  socketQuery={socketQuery}
+                />
+              ))}
+            </Fragment>
+          ))}
         </div>
-      )}
-      <div className="flex flex-col-reverse mt-auto">
-        {data?.pages?.map((group, i) => (
-          <Fragment key={i}>
-            {group.items.map((message: MessageWithMemberWithProfile) => (
-              <ChatItem
-                key={message.id}
-                id={message.id}
-                currentMember={member}
-                content={message.content}
-                member={message.member}
-                fileUrl={message.fileUrl}
-                deleted={message.deleted}
-                timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
-                isUpdate={message.updatedAt !== message.createdAt}
-                socketUrl={socketUrl}
-                socketQuery={socketQuery}
-              />
-            ))}
-          </Fragment>
-        ))}
+
+        {/* </div> */}
+        <div ref={bottomRef} />
       </div>
-      <div ref={bottomRef} />
     </div>
   );
 };
