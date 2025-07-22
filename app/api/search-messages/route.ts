@@ -1,7 +1,8 @@
 import { currentProfile } from '@/lib/current-profile';
 import { db } from '@/lib/db';
-import { Message } from '@prisma/client';
+import { Message, Prisma } from '@prisma/client';
 import { NextResponse } from 'next/server';
+import { boolean, number } from 'zod';
 
 const MESSAGES_BATCH = 10;
 
@@ -13,6 +14,12 @@ export async function GET(req: Request) {
     const page = searchParams.get('page');
     const channelId = searchParams.get('channelId')
     let searchKeyword = searchParams.get('keyword');
+    let sortOrder : Prisma.SortOrder = 'asc';
+    let sort = searchParams.get('sort');
+    if(sort === 'old'){
+      sortOrder = 'desc';
+    }
+    
     if(!searchKeyword){
         searchKeyword = "";
     }
@@ -27,6 +34,7 @@ export async function GET(req: Request) {
         },
         channelId : channelId,
       },
+      
     });
     if(searchMessagesResultsCount == 0){
       return NextResponse.json({
@@ -56,7 +64,7 @@ export async function GET(req: Request) {
             },
           },
         },
-        orderBy : {createdAt : 'desc'},
+        orderBy : {createdAt : sortOrder},
         take : MESSAGES_BATCH,
         skip : skip,
         

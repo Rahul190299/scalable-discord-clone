@@ -71,7 +71,6 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
         <div className="overflow-y-auto h-screen">
           <SearchContainer
           member={member}
-          chatId={channel.id}
           apiUrl="/api/search-messages"
           paramKey="channelId"
           paramValue={channel.id}
