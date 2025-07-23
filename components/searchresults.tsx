@@ -57,6 +57,7 @@ export const SearchResults = (props:SearchMessagesProps) => {
         paramValue={props.paramValue}
         setLoading = {setLoading}
         setMessageCount={setMessageCount}
+        sortOrder = {activeButton === 'new' ? 'asc' : 'desc'}
       />
     </div>
   );

@@ -7,6 +7,7 @@ interface ChatQueryProps {
   apiUrl: string;
   paramKey: 'channelId' | 'conversationId';
   paramValue: string;
+  sortOrder : string;
 }
 
 export const useChatSearch = ({
@@ -14,6 +15,7 @@ export const useChatSearch = ({
   paramKey,
   paramValue,
   currentPage,
+  sortOrder
 }: ChatQueryProps) => {
   const { searchText } = useSearchStore();
   const searchMessages = async (currentPage : string) => {
@@ -24,6 +26,7 @@ export const useChatSearch = ({
           page: currentPage,
           [paramKey]: paramValue,
           "keyword" : searchText,
+          "sort" : sortOrder,
         },
       },
       { skipNull: true }

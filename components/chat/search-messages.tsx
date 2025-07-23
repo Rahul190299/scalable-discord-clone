@@ -18,6 +18,7 @@ interface SearchMessagesProps {
   apiUrl: string;
   paramKey: 'channelId';
   paramValue: string;
+  sortOrder : string;
   setLoading : Dispatch<SetStateAction<boolean>>;
   setMessageCount : Dispatch<SetStateAction<number>>;
 }
@@ -29,6 +30,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   paramValue,
   setLoading,
   setMessageCount,
+  sortOrder
 }) => {
   //const queryKey = `chat:${chatId}`;
   const [currentPage,setCurrentPage] = useState(1);
@@ -42,7 +44,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
       apiUrl,
       paramKey,
       paramValue,
-
+      sortOrder
     });
     
     //console.log(data);
