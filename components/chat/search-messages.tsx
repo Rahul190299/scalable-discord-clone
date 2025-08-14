@@ -35,8 +35,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   //const queryKey = `chat:${chatId}`;
   const [currentPage,setCurrentPage] = useState(1);
 
-  const chatRef = useRef<ElementRef<'div'>>(null);
-  const bottomRef = useRef<ElementRef<'div'>>(null);
+  
   console.log(apiUrl);
   const { data,error, status } =
     useChatSearch({
@@ -47,7 +46,8 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
       sortOrder
     });
     
-    //console.log(data);
+    console.log(data);
+    console.log("status => "+ status);
   if (status === 'loading') {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
@@ -69,13 +69,23 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
       </div>
     );
   }
-  setLoading(false);
-  setMessageCount(data?.count);
+  //setLoading(false);
+  //setMessageCount(data?.count);
+  if(data?.count == 0){
+    return (
+      <div className="flex flex-col items-center justify-center text-center min-h-[300px]">
+        <p className="text-lg font-medium text-gray-200">
+          We searched far and wide.
+        </p>
+        <p className="text-gray-400">Unfortunately, no results were found.</p>
+      </div>
+    );
+  }
   return (
     <>
-    <div ref={chatRef} className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
+    <div  className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
       
-      <div className="flex flex-col-reverse mt-auto">
+      <div className="flex flex-col mt-auto">
         {data?.messages?.map((message :any, i:any) => (
           <Fragment key={i}>
             <ChatItem
@@ -90,12 +100,13 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
                 isUpdate={message.updatedAt !== message.createdAt}
                 socketUrl=''
                 socketQuery= { {" ": ""} }
+                fromSearchMessages = {true}
             />
           </Fragment>
         ))}
 
       </div>
-      <div ref={bottomRef} />
+      
     </div>
     <Pagination totalPages={data?.messages?.length} setSelectedPage={setCurrentPage} currentSelectedPage={currentPage}/>
    </>

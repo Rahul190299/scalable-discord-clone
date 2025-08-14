@@ -21,7 +21,7 @@ export const SearchContainer : FC<SearchMessagesProps> = ({
   const { showSearchPane } = useSearchStore();
   return (
     showSearchPane && (
-      <div className="basis-2/5 overflow-y-auto">
+      <div className="basis-2/5 overflow-y-auto h-screen">
         <SearchResults 
         member={member}
         apiUrl="/api/search-messages"

@@ -31,6 +31,7 @@ interface ChatItemProps {
   isUpdate: boolean;
   socketUrl: string;
   socketQuery: Record<string, string>;
+  fromSearchMessages : boolean;
 }
 
 const roleIconMap = {
@@ -51,6 +52,7 @@ const ChatItem: FC<ChatItemProps> = ({
   socketQuery,
   socketUrl,
   timestamp,
+  fromSearchMessages,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { onOpen } = useModal();

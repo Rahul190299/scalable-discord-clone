@@ -120,6 +120,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
                   isUpdate={message.updatedAt !== message.createdAt}
                   socketUrl={socketUrl}
                   socketQuery={socketQuery}
+                  fromSearchMessages = {false}
                 />
               ))}
             </Fragment>

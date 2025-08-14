@@ -5,9 +5,9 @@ import { useSearchStore } from "@/store/searchstore";
 interface ChatQueryProps {
   currentPage: number;
   apiUrl: string;
-  paramKey: 'channelId' | 'conversationId';
+  paramKey: "channelId" | "conversationId";
   paramValue: string;
-  sortOrder : string;
+  sortOrder: string;
 }
 
 export const useChatSearch = ({
@@ -15,33 +15,38 @@ export const useChatSearch = ({
   paramKey,
   paramValue,
   currentPage,
-  sortOrder
+  sortOrder,
 }: ChatQueryProps) => {
   const { searchText } = useSearchStore();
-  const searchMessages = async (currentPage : string) => {
+  const searchMessages = async (
+    currentPage: string,
+    keyword: string,
+    sort: string
+  ) => {
     const url = qs.stringifyUrl(
       {
         url: apiUrl,
         query: {
           page: currentPage,
           [paramKey]: paramValue,
-          "keyword" : searchText,
-          "sort" : sortOrder,
+          keyword,
+          sort,
         },
       },
       { skipNull: true }
     );
-    console.log("search api url" + apiUrl);
+
+    console.log("search api url", url);
     const res = await fetch(url);
-    let searchMessages = await res.json();
-    console.log("search result " + searchMessages);
-    return searchMessages;
+    const result = await res.json();
+    console.log("search result", result);
+    return result;
   };
 
   const { status, error, data } = useQuery({
-    queryKey: [currentPage + searchText],
-    queryFn: () =>  searchMessages(currentPage.toString()),
-    cacheTime: 0,   
+    queryKey: ['messages', currentPage, searchText, sortOrder], // include all dependencies
+    queryFn: () => searchMessages(currentPage.toString(), searchText, sortOrder),
+    cacheTime: 0,
   });
-  return {status,error,data}; 
+  return { status, error, data };
 };

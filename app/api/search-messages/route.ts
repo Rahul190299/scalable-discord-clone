@@ -16,7 +16,7 @@ export async function GET(req: Request) {
     let searchKeyword = searchParams.get('keyword');
     let sortOrder : Prisma.SortOrder = 'asc';
     let sort = searchParams.get('sort');
-    if(sort === 'old'){
+    if(sort === 'desc'){
       sortOrder = 'desc';
     }
     

@@ -68,14 +68,14 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
             query={{ channelId: channel.id, serverId: channel.serverId }}
           />
         </div>
-        <div className="overflow-y-auto h-screen">
-          <SearchContainer
-          member={member}
-          apiUrl="/api/search-messages"
-          paramKey="channelId"
-          paramValue={channel.id}
-          />
-        </div>
+        
+        <SearchContainer
+        member={member}
+        apiUrl="/api/search-messages"
+        paramKey="channelId"
+        paramValue={channel.id}
+        />
+        
         
       </div>
     </div>

@@ -1,24 +1,23 @@
 "use client";
 import { useState } from "react";
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from "react";
 import SearchMessagesResult from "./chat/search-messages";
 import Spinner from "./ui/spinner";
-import { Member, Message, Profile } from '@prisma/client';
+import { Member, Message, Profile } from "@prisma/client";
 import { useSearchMessagesStore } from "@/store/searchstore";
 import { Button } from "./ui/button";
-
 
 interface SearchMessagesProps {
   member: Member;
   apiUrl: string;
-  paramKey: 'channelId';
+  paramKey: "channelId";
   paramValue: string;
 }
-export const SearchResults = (props:SearchMessagesProps) => {
+export const SearchResults = (props: SearchMessagesProps) => {
   const [activeButton, setActiveButton] = useState("old"); // Track the active button
   const [result, setResults] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [count,setMessageCount] = useState(0);
+  const [count, setMessageCount] = useState(0);
   return (
     <div>
       <div className="flex justify-around dark:bg-gray-800 p-1">
@@ -33,21 +32,20 @@ export const SearchResults = (props:SearchMessagesProps) => {
           )}
         </div>
         <div className="flex gap-2">
-        <Button
-        variant={activeButton === 'old' ? 'branding' : 'toggle'}
-        size={'sm'}
-        onClick={() => setActiveButton('old')}
-      >
-        Old
-      </Button>
-      <Button
-        variant={activeButton === 'new' ? 'branding' : 'toggle'}
-        onClick={() => setActiveButton('new')}
-        size={'sm'}
-      >
-        New
-      </Button>
-          
+          <Button
+            variant={activeButton === "old" ? "branding" : "toggle"}
+            size={"sm"}
+            onClick={() => setActiveButton("old")}
+          >
+            Old
+          </Button>
+          <Button
+            variant={activeButton === "new" ? "branding" : "toggle"}
+            onClick={() => setActiveButton("new")}
+            size={"sm"}
+          >
+            New
+          </Button>
         </div>
       </div>
       <SearchMessagesResult
@@ -55,9 +53,9 @@ export const SearchResults = (props:SearchMessagesProps) => {
         apiUrl="/api/search-messages"
         paramKey="channelId"
         paramValue={props.paramValue}
-        setLoading = {setLoading}
+        setLoading={setLoading}
         setMessageCount={setMessageCount}
-        sortOrder = {activeButton === 'new' ? 'asc' : 'desc'}
+        sortOrder={activeButton === "new" ? "desc" : "asc"}
       />
     </div>
   );
