@@ -36,7 +36,7 @@ const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
 
   return (
     <div className="bg-white dark:bg-[#313338]   border-2">
-      <div className="sticky top-0 z-50 dark:bg-white">
+      <div className="z-50 dark:bg-white">
         <ChatHeader
           name={channel.name}
           serverId={channel.serverId}
