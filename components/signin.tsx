@@ -55,7 +55,7 @@ export function SignInForm() {
         case 200:
           if (redirectUrl === "/") {
             router.push(redirectUrl);
-            toast.success("Signed in");
+            toast.success("Logged in successfully");
           } else {
             router.push(redirectUrl);
             toast.message(strMessage);
