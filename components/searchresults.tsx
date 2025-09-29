@@ -15,7 +15,6 @@ interface SearchMessagesProps {
 }
 export const SearchResults = (props: SearchMessagesProps) => {
   const [activeButton, setActiveButton] = useState("old"); // Track the active button
-  const [result, setResults] = useState(0);
   const [loading, setLoading] = useState(true);
   const [count, setMessageCount] = useState(0);
   return (

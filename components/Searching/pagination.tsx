@@ -1,14 +1,13 @@
-import { currentProfilePages } from '@/lib/current-profile-pages';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { currentProfilePages } from "@/lib/current-profile-pages";
+import { Dispatch, SetStateAction, useState } from "react";
 
-interface PaginationProps{
-    totalPages : number,
-    setSelectedPage : Dispatch<SetStateAction<number>>,
-    currentSelectedPage : number
+interface PaginationProps {
+  totalPages: number;
+  setSelectedPage: Dispatch<SetStateAction<number>>;
+  currentSelectedPage: number;
 }
 
-export const Pagination = (props: PaginationProps)  => {
-    
+export const Pagination = (props: PaginationProps) => {
   const [jumpPage, setJumpPage] = useState("");
 
   const handleJumpSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -20,37 +19,41 @@ export const Pagination = (props: PaginationProps)  => {
       }
     }
   };
-    const getPages = () : (string|number)[] => {
-        let pages: (number | string)[] = [];
-        pages.push(1);
-        if(props.currentSelectedPage < 4){
-            pages.push(2,3);
+  const getPages = (): (string | number)[] => {
+    let pages: (number | string)[] = [];
+    console.log(props.totalPages);
+    if (props.totalPages > 8) {
+      pages.push(1);
+      if (props.currentSelectedPage < 4) {
+        pages.push(2, 3);
+      }
+      if (props.currentSelectedPage > 3) {
+        pages.push("input-left");
+        if (props.currentSelectedPage > props.totalPages - 3) {
+          pages.push(props.totalPages - 1, props.totalPages - 2);
         }
-        if (props.currentSelectedPage > 3){
-          pages.push("input-left");
-          if(props.currentSelectedPage > props.totalPages-3){
-            pages.push(props.totalPages-1,props.totalPages-2);
-          }
-          if(props.currentSelectedPage < props.totalPages -4){
-              pages.push("input-right");
-          }
-          pages.push(props.totalPages);
-        } 
-        
-
-        return pages;
+        if (props.currentSelectedPage < props.totalPages - 4) {
+          pages.push("input-right");
+        }
+        pages.push(props.totalPages);
+      }
     }
-    const pages = getPages();
 
-    return (
+    return pages;
+  };
+  const pages = getPages();
+
+  return (
     <div className="flex items-center gap-2 text-white">
-      <button
-        onClick={() => props.setSelectedPage(props.currentSelectedPage - 1)}
-        disabled={props.currentSelectedPage === 1}
-        className="px-2 py-1 disabled:opacity-40"
-      >
-        &lt; Back
-      </button>
+      {props.totalPages > 8 && (
+        <button
+          onClick={() => props.setSelectedPage(props.currentSelectedPage - 1)}
+          disabled={props.currentSelectedPage === 1}
+          className="px-2 py-1 disabled:opacity-40"
+        >
+          &lt; Back
+        </button>
+      )}
 
       {pages.map((item, index) => {
         if (item === "input-left" || item === "input-right") {
@@ -68,7 +71,6 @@ export const Pagination = (props: PaginationProps)  => {
             />
           );
         }
-        
 
         return (
           <button
@@ -76,21 +78,24 @@ export const Pagination = (props: PaginationProps)  => {
             //@ts-ignore
             onClick={() => props.setSelectedPage(item)}
             className={`px-3 py-1 rounded-full ${
-              item === props.currentSelectedPage ? "bg-indigo-500 text-white" : "hover:bg-gray-700"
+              item === props.currentSelectedPage
+                ? "bg-indigo-500 text-white"
+                : "hover:bg-gray-700"
             }`}
           >
             {item}
           </button>
         );
       })}
-
-      <button
-        onClick={() => props.setSelectedPage(props.currentSelectedPage + 1)}
-        disabled={props.currentSelectedPage === props.totalPages}
-        className="px-2 py-1 disabled:opacity-40"
-      >
-        Next &gt;
-      </button>
+      {props.totalPages > 8 && (
+        <button
+          onClick={() => props.setSelectedPage(props.currentSelectedPage + 1)}
+          disabled={props.currentSelectedPage === props.totalPages}
+          className="px-2 py-1 disabled:opacity-40"
+        >
+          Next &gt;
+        </button>
+      )}
     </div>
-    )
-}
+  );
+};
