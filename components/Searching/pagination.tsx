@@ -22,10 +22,13 @@ export const Pagination = (props: PaginationProps) => {
   const getPages = (): (string | number)[] => {
     let pages: (number | string)[] = [];
     console.log(props.totalPages);
-    if (props.totalPages > 8) {
+    if (props.totalPages > 10) {
       pages.push(1);
-      if (props.currentSelectedPage < 4) {
-        pages.push(2, 3);
+      if (props.currentSelectedPage < 4 && Math.ceil(props.totalPages/10) >1) {
+        pages.push(2);
+      }
+      if (props.currentSelectedPage < 4 && Math.ceil(props.totalPages/10) >2) {
+        pages.push(3);
       }
       if (props.currentSelectedPage > 3) {
         pages.push("input-left");
@@ -35,7 +38,7 @@ export const Pagination = (props: PaginationProps) => {
         if (props.currentSelectedPage < props.totalPages - 4) {
           pages.push("input-right");
         }
-        pages.push(props.totalPages);
+        pages.push(Math.ceil(props.totalPages/10));
       }
     }
 
@@ -45,7 +48,7 @@ export const Pagination = (props: PaginationProps) => {
 
   return (
     <div className="flex items-center gap-2 text-white">
-      {props.totalPages > 8 && (
+      {props.totalPages > 10 && (
         <button
           onClick={() => props.setSelectedPage(props.currentSelectedPage - 1)}
           disabled={props.currentSelectedPage === 1}
@@ -64,7 +67,7 @@ export const Pagination = (props: PaginationProps) => {
               placeholder="..."
               min={1}
               max={props.totalPages}
-              className="w-12 px-2 py-1 text-center bg-gray-800 border border-gray-600 rounded focus:outline-none"
+              className="w-12 px-2 py-1 text-center dark:bg-gray-800 border border-gray-600 rounded focus:outline-none"
               value={jumpPage}
               onChange={(e) => setJumpPage(e.target.value)}
               onKeyDown={handleJumpSubmit}
@@ -87,7 +90,7 @@ export const Pagination = (props: PaginationProps) => {
           </button>
         );
       })}
-      {props.totalPages > 8 && (
+      {props.totalPages > 10 && (
         <button
           onClick={() => props.setSelectedPage(props.currentSelectedPage + 1)}
           disabled={props.currentSelectedPage === props.totalPages}
