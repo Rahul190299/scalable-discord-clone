@@ -116,7 +116,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
         </div>
       </div>
       <Pagination
-        totalPages={data?.messages?.length}
+        totalPages={data?.count}
         setSelectedPage={setCurrentPage}
         currentSelectedPage={currentPage}
       />

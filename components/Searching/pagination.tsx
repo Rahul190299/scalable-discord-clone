@@ -52,7 +52,7 @@ export const Pagination = (props: PaginationProps) => {
         <button
           onClick={() => props.setSelectedPage(props.currentSelectedPage - 1)}
           disabled={props.currentSelectedPage === 1}
-          className="px-2 py-1 disabled:opacity-40"
+          className="px-2 py-1 disabled:opacity-40 light:bg-gray-100"
         >
           &lt; Back
         </button>
@@ -82,8 +82,8 @@ export const Pagination = (props: PaginationProps) => {
             onClick={() => props.setSelectedPage(item)}
             className={`px-3 py-1 rounded-full ${
               item === props.currentSelectedPage
-                ? "bg-indigo-500 text-white"
-                : "hover:bg-gray-700"
+                ? "bg-blue-600 dark:bg-indigo-500 dark:text-white"
+                : "hover:bg-gray-300  dark:hover:bg-gray-700 text-black dark:text-white"
             }`}
           >
             {item}
