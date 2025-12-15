@@ -1,4 +1,3 @@
-//import { auth } from '@clerk/nextjs';
 
 import { db } from "@/lib/db";
 import { cookies } from "next/headers"; // To access cookies in server-side component
@@ -15,8 +14,8 @@ export const currentProfile = async (reqCookie : string | any = null) => {
       cookieString = reqCookie;
     }
     else{
-      cookieStore = cookies();
-      cookieString = cookieStore?.get("Set-Cookie")?.value;
+      cookieStore = await cookies();
+      cookieString =  cookieStore?.get("Set-Cookie")?.value;
     }
     if (!cookieString) {
       return null;
