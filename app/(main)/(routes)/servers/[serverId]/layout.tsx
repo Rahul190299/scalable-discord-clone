@@ -8,7 +8,9 @@ import ServerSidebar from '@/components/server/server-sidebar';
 
 interface serverIdLayoutProps {
     children: ReactNode;
-    params: { serverId: string };
+    params: Promise<{
+        serverId : string,
+    }>;
 }
 
 const ServerIdLayout: FC<serverIdLayoutProps> = async ({
@@ -17,10 +19,10 @@ const ServerIdLayout: FC<serverIdLayoutProps> = async ({
 }) => {
     const profile = await currentProfile();
     if (!profile) return redirect('/sign-in');;
-
+    const {serverId } = await params;
     const server = await db.server.findUnique({
         where: {
-            id: params.serverId,
+            id: serverId,
             members: {
                 some: {
                     profileId: profile.id,
@@ -33,7 +35,7 @@ const ServerIdLayout: FC<serverIdLayoutProps> = async ({
     return (
         <div className="">
             <div className="hidden md:flex  w-60 z-20 flex-col fixed inset-y-0">
-                <ServerSidebar serverId={params.serverId} />
+                <ServerSidebar serverId={serverId} />
             </div>
             <main className="md:pl-60">{children}</main>
         </div>

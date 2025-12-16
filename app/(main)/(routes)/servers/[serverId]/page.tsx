@@ -5,19 +5,19 @@ import { redirect } from 'next/navigation';
 import { FC } from 'react';
 
 interface ServerIdPageProps {
-  params: {
+  params: Promise<{
     serverId: string;
-  };
+  }>;
 }
 
 const ServerIdPage: FC<ServerIdPageProps> = async ({ params }) => {
   const profile = await currentProfile();
 
   if (!profile) return redirect('/sign-in');;
-
+  const {serverId} = await params;
   const server = await db.server.findUnique({
     where: {
-      id: params.serverId,
+      id: serverId,
       members: {
         some: { profileId: profile.id },
       },
@@ -37,7 +37,7 @@ const ServerIdPage: FC<ServerIdPageProps> = async ({ params }) => {
   const initialChannel = server?.channels[0];
 
   if (initialChannel?.name !== 'general') return null;
-  return redirect(`/servers/${params.serverId}/channels/${initialChannel.id}`);
+  return redirect(`/servers/${serverId}/channels/${initialChannel.id}`);
 };
 
 export default ServerIdPage;
