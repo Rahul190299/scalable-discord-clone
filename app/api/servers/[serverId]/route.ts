@@ -1,19 +1,20 @@
 import { currentProfile } from '@/lib/current-profile';
 import { db } from '@/lib/db';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { serverId: string } }
+  req: NextRequest,
+  context  : {params : Promise<string>}
 ) {
   try {
+    const serverId = await context.params;
     const profile = await currentProfile();
 
     if (!profile) return new NextResponse('Unauthorized', { status: 401 });
 
     const server = await db.server.delete({
       where: {
-        id: params.serverId,
+        id: serverId,
         profileId: profile.id,
       },
     });
@@ -27,9 +28,10 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { serverId: string } }
+  context  : {params : Promise<string>}
 ) {
   try {
+    const serverId = await context.params;
     const profile = await currentProfile();
     const { name, imageUrl } = await req.json();
 
@@ -37,7 +39,7 @@ export async function PATCH(
 
     const server = await db.server.update({
       where: {
-        id: params.serverId,
+        id: serverId,
         profileId: profile.id,
       },
       data: { name, imageUrl },

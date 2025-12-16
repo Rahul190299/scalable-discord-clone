@@ -10,20 +10,20 @@ import ChatMessages from '@/components/chat/chat-messages';
 import ChatInput from '@/components/chat/chat-input';
 
 interface MemberIdPageProps {
-  params: {
+  params: Promise<{
     memberId: string;
     serverId: string;
-  };
+  }>;
 }
 
 const MemberIdPage: FC<MemberIdPageProps> = async ({ params }) => {
   const profile = await currentProfile();
-
+  const {serverId,memberId} = await params;
   if (!profile) return redirect('/sign-in');
 
   const currentMember = await db.member.findFirst({
     where: {
-      serverId: params.serverId,
+      serverId: serverId,
       profileId: profile.id,
     },
     include: {
@@ -35,10 +35,10 @@ const MemberIdPage: FC<MemberIdPageProps> = async ({ params }) => {
 
   const conversation = await getOrCreateConversation(
     currentMember.id,
-    params.memberId
+    memberId
   );
 
-  if (!conversation) return redirect(`/servers/${params.serverId}`);
+  if (!conversation) return redirect(`/servers/${serverId}`);
 
   const { memberOne, memberTwo } = conversation;
 
@@ -50,7 +50,7 @@ const MemberIdPage: FC<MemberIdPageProps> = async ({ params }) => {
       <ChatHeader
         imageUrl={otherMember.profile.imageUrl}
         name={otherMember.profile.name}
-        serverId={params.serverId}
+        serverId={serverId}
         type="conversation"
       />
       <ChatMessages

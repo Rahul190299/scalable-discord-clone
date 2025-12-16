@@ -8,26 +8,26 @@ import ChatInput from "@/components/chat/chat-input";
 import ChatMessages from "@/components/chat/chat-messages";
 import { SearchContainer } from "@/components/search-container";
 interface ChannelIdPageProps {
-  params: {
+  params: Promise<{
     serverId: string;
     channelId: string;
-  };
+  }>;
 }
 
 const ChannelIdPage: FC<ChannelIdPageProps> = async ({ params }) => {
   const profile = await currentProfile();
-
+  const {serverId, channelId} = await params;
   if (!profile) return redirect("/sign-in");
 
   const channel = await db.channel.findUnique({
     where: {
-      id: params.channelId,
+      id: channelId,
     },
   });
 
   const member = await db.member.findFirst({
     where: {
-      serverId: params.serverId,
+      serverId: serverId,
       profileId: profile.id,
     },
   });

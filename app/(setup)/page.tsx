@@ -11,7 +11,7 @@ interface setupPageProps {}
 const SetupPage: FC<setupPageProps> = async ({}) => {
     
    
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const cookieString = cookieStore.get('Set-Cookie')?.value;
     let user = null;
     if(cookieString){

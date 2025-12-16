@@ -5,8 +5,8 @@ import Auth from '@/lib/auth';
 
 const f = createUploadthing();
 
-const handleAuth = () => {
-    const cookieStore = cookies();
+const  handleAuth = async () => {
+    const cookieStore = await cookies();
     const cookieString = cookieStore.get('Set-Cookie')?.value;
     let user = null;
     if(cookieString){
