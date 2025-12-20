@@ -30,7 +30,7 @@ export function SignInForm() {
   const setEmail = useSessionStore((state) => state.setEmail);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {email : "",password : ""},
   });
 
   const router = useRouter();
