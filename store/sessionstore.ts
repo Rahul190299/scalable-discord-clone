@@ -17,3 +17,13 @@ export const useSessionStore = create<userStore>((set) => ({
     email : "",
     setEmail : (email) => set({email : email}),
 }))
+
+interface pageStore{
+    currentPage : number,
+    setCurrentPage : (currentPage : number) => void,
+}
+
+export const usePageStore = create<pageStore>((set) => ({
+    currentPage : 0,
+    setCurrentPage : (currentPage) =>set({currentPage : currentPage}),
+}));

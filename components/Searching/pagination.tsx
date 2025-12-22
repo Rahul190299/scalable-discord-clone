@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 
 interface PaginationProps {
   totalPages: number;
-  setSelectedPage: Dispatch<SetStateAction<number>>;
+  setSelectedPage: (currentPage : number) => void;
   currentSelectedPage: number;
 }
 
@@ -93,7 +93,7 @@ export const Pagination = (props: PaginationProps) => {
       {props.totalPages > 10 && (
         <button
           onClick={() => props.setSelectedPage(props.currentSelectedPage + 1)}
-          disabled={props.currentSelectedPage === props.totalPages}
+          disabled={props.currentSelectedPage === Math.ceil(props.totalPages/10)}
           className="px-2 py-1 disabled:opacity-40"
         >
           Next &gt;

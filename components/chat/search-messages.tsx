@@ -15,6 +15,7 @@ import { useChatSearch } from "@/hooks/use-chat-search";
 import ChatItem from "./chat-item";
 import { format } from "date-fns";
 import { Pagination } from "../Searching/pagination";
+import { usePageStore } from "@/store/sessionstore";
 
 type MessageWithMemberWithProfile = Message & {
   member: Member & { profile: Profile };
@@ -42,7 +43,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   sortOrder,
 }) => {
   //const queryKey = `chat:${chatId}`;
-  const [currentPage, setCurrentPage] = useState(1);
+  const {currentPage, setCurrentPage} = usePageStore();
 
   console.log(apiUrl);
   const { data, error, status } = useChatSearch({
