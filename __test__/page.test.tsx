@@ -1,4 +1,4 @@
-import { render, screen ,fireEvent} from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Member, MemberRole, Profile } from "@prisma/client";
 import ChatHeader from "@/components/chat/chat-header";
 import ChatItem from "@/components/chat/chat-item";
@@ -143,6 +143,14 @@ describe("chat item test", () => {
       updatedAt: new Date(),
     },
   };
+  const currentMember = {
+    id: "member-2",
+    role: MemberRole.ADMIN,
+    profileId: "profile-2",
+    serverId: "server-123",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
   it("renders chat content and avatar", () => {
     render(<ChatItem {...chatItemProps} />);
 
@@ -168,7 +176,7 @@ describe("chat item test", () => {
     render(
       <ChatItem
         {...chatItemProps}
-        currentMember={{ id: "member-1", role: MemberRole.MODERATOR }}
+        currentMember={currentMember}
       />
     );
 
