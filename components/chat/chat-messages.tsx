@@ -85,7 +85,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   }
 
   return (
-    <div className=" flex flex-col justify-end   h-screen ">
+    <div className=" flex flex-col justify-end h-[84vh]">
       <div ref={chatRef} className="overflow-y-auto ">
         {!hasNextPage && <div className="flex-1" />}
         {!hasNextPage && <ChatWelcome type={type} name={name} />}
@@ -104,7 +104,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
           </div>
         )}
         {/* <div ref={chatRef} className="overflow-y-auto"> */}
-        <div className="flex flex-1 flex-col-reverse py-4 justify-end">
+        <div className="flex flex-1 flex-col py-4">
           {data?.pages?.map((group, i) => (
             <Fragment key={i}>
               {group.items.map((message: MessageWithMemberWithProfile) => (

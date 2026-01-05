@@ -27,8 +27,8 @@ export const useChatScroll = ({
     const handleScroll = () => {
       
       const scrollTop = topDiv?.scrollTop;
-      //console.log("scrollTop" + scrollTop);
-      //console.log("in handle scroll");
+      console.log("scrollTop" + scrollTop);
+      console.log("in handle scroll");
       if (scrollTop === 0 && shouldLoadMore) {
         // Save current scroll height before DOM updates
         const prevScrollHeight = topDiv?.scrollHeight;
