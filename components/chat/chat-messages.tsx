@@ -85,7 +85,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   }
 
   return (
-    <div className=" flex flex-col justify-end h-[84vh]">
+    <div className=" flex flex-col justify-end h-[81vh]">
       <div ref={chatRef} className="overflow-y-auto ">
         {!hasNextPage && <div className="flex-1" />}
         {!hasNextPage && <ChatWelcome type={type} name={name} />}

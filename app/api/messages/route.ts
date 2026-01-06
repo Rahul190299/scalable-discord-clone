@@ -1,6 +1,7 @@
 import { currentProfile } from '@/lib/current-profile';
 import { db } from '@/lib/db';
 import { Message } from '@prisma/client';
+import { getDate } from 'date-fns';
 import { NextResponse } from 'next/server';
 
 const MESSAGES_BATCH = 10;
@@ -60,7 +61,7 @@ export async function GET(req: Request) {
     if (messages.length === MESSAGES_BATCH) {
       nextCursor = messages[MESSAGES_BATCH - 1].id;
     }
-
+    
     return NextResponse.json({
       items: messages,
       nextCursor,

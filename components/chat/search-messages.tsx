@@ -94,7 +94,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   }
   return (
     <>
-      <div className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-blue-500 border-2 ">
+      <div className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-slate-500 border-2 ">
         <div className="flex flex-col mt-auto">
           {data?.messages?.map((message: any, i: any) => (
             <Fragment key={i}>
