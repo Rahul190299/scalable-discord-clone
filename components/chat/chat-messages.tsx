@@ -104,7 +104,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
           </div>
         )}
         {/* <div ref={chatRef} className="overflow-y-auto"> */}
-        <div className="flex flex-1 flex-col py-4">
+        <div className="flex flex-1 py-4 flex-col-reverse">
           {data?.pages?.map((group, i) => (
             <Fragment key={i}>
               {group.items.map((message: MessageWithMemberWithProfile) => (
