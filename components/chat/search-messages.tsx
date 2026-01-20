@@ -43,7 +43,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   sortOrder,
 }) => {
   //const queryKey = `chat:${chatId}`;
-  const {currentPage, setCurrentPage} = usePageStore();
+  const { currentPage, setCurrentPage } = usePageStore();
 
   console.log(apiUrl);
   const { data, error, status } = useChatSearch({
@@ -58,7 +58,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
       setLoading(false);
       setMessageCount(data?.count);
     }
-  }, [data, setMessageCount,setLoading]);
+  }, [data, setMessageCount, setLoading]);
 
   console.log(data);
   console.log("status => " + status);
@@ -94,24 +94,26 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
   }
   return (
     <>
-      <div className="flex-1 flex flex-col justify-end py-4 overflow-y-auto border-slate-500 border-2 ">
+      <div className="flex-1 flex flex-col justify-end py-4 overflow-y-auto">
         <div className="flex flex-col mt-auto">
           {data?.messages?.map((message: any, i: any) => (
             <Fragment key={i}>
-              <ChatItem
-                key={message.id}
-                id={message.id}
-                currentMember={member}
-                content={message.content}
-                member={message.member}
-                fileUrl={message.fileUrl}
-                deleted={message.deleted}
-                timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
-                isUpdate={message.updatedAt !== message.createdAt}
-                socketUrl=""
-                socketQuery={{ " ": "" }}
-                fromSearchMessages={true}
-              />
+              <div className="border border-zinc-700 rounded-md border-4 m-2 dark:bg-slate-800">
+                <ChatItem
+                  key={message.id}
+                  id={message.id}
+                  currentMember={member}
+                  content={message.content}
+                  member={message.member}
+                  fileUrl={message.fileUrl}
+                  deleted={message.deleted}
+                  timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
+                  isUpdate={message.updatedAt !== message.createdAt}
+                  socketUrl=""
+                  socketQuery={{ " ": "" }}
+                  fromSearchMessages={true}
+                />
+              </div>
             </Fragment>
           ))}
         </div>

@@ -18,10 +18,10 @@ export const SearchResults = (props: SearchMessagesProps) => {
   const [activeButton, setActiveButton] = useState("old"); // Track the active button
   const [loading, setLoading] = useState(true);
   const [count, setMessageCount] = useState(0);
-  const {setCurrentPage} = usePageStore();
+  const { setCurrentPage } = usePageStore();
   return (
-    <div>
-      <div className="flex justify-around dark:bg-gray-800 p-1">
+    <div className="dark:text-white dark:bg-neutral-800">
+      <div className="flex justify-around text-lg  p-1 font-sans">
         <div>
           {loading ? (
             <div className="flex justify-center my-2">
@@ -37,7 +37,7 @@ export const SearchResults = (props: SearchMessagesProps) => {
             variant={activeButton === "old" ? "branding" : "toggle"}
             size={"sm"}
             onClick={() => {
-              setActiveButton("old")
+              setActiveButton("old");
               setCurrentPage(1);
             }}
           >
