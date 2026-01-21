@@ -98,7 +98,7 @@ const SearchMessagesResult: FC<SearchMessagesProps> = ({
         <div className="flex flex-col mt-auto">
           {data?.messages?.map((message: any, i: any) => (
             <Fragment key={i}>
-              <div className="border border-zinc-700 rounded-md border-4 m-2 dark:bg-slate-800">
+              <div className="border border-zinc-700 rounded-md border-4 m-2 bg-zinc-800">
                 <ChatItem
                   key={message.id}
                   id={message.id}
